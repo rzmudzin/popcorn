@@ -16,6 +16,8 @@ public class AppMain extends Application {
         super.onCreate();
         AppMain.context = getApplicationContext();
         DataServiceBroadcastReceiver.getInstance().Register(AppMain.context);
+
+
     }
 
     public static Context getAppContext() {

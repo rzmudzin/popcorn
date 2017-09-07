@@ -1,18 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.phoenixroberts.popcorn.MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:minWidth="25dp"
+        android:minHeight="25dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme">
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_top"
+                android:theme="@style/ToolBarStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+            <LinearLayout
+                android:id="@+id/mentorViewToggle"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/commercial_badge_color"
+                android:orientation="vertical">
+                <Spinner
+                    android:layout_gravity="end"
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                </Spinner>
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/content_frame" />
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
+    <!--
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/fragment"
+              android:name="demo.example.com.customarrayadapter.FlavorGridFragment"
+              tools:layout="@layout/fragment_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"/>
+    -->
