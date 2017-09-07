@@ -1,6 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="tabsScrollColor">#FFFFFF</color>
+    <color name="toolbarIconColor">#FFFFFF</color>
+
+    <color name="text_white">#FFFFFF</color>
+    <color name="background_gray">#acaca9</color>
+    <color name="medium_gray">#8F8F8F</color>
+    <color name="servpro_orange">#F37736</color>
+    <color name="disable_button">#fff39e72</color>
+    <color name="delete_red">#FF0000</color>
+
+    <color name="alert_red">#b40000</color>
+    <color name="light_red">#F7d9d9</color>
+
+    <color name="servpro_green">#4EA135</color>
+    <color name="servpro_green_accent">#4EA135</color>
+    <color name="warning_cell_background">#FFFFEB</color>
+    <color name="success_cell_background">#EBFFEB</color>
+    <color name="error_cell_background">#F7d9d9</color>
+    <color name="error_cell_background_pressed">#f3c4c4</color>
+    <color name="warning_cell_text_color">#C8C800</color>
+    <color name="residential_badge_color">#ff639ef6</color>
+    <color name="commercial_badge_color">#ffa379de</color>
+    <color name="hamburger_color">#FFFFFF</color>
+    <color name="menu_header_text">#777777</color>
+    <color name="menu_header_background">#CECECE</color>
+    <color name="menu_background_color">#EFEEF4</color>
+    <color name="menu_text">#3B3A3C</color>
+    <!-- <color name="note_background_color">#FFFAED</color> -->
+    <color name="note_background_color">#FFFFFF</color>
+
+
+    <!-- White to Black -->
+    <color name="white">#FFFFFF</color>
+    <color name="light_gray">#EFF2F5</color>
+    <color name="med_gray">#C7D2DC</color>
+    <color name="gray">#5C7082</color>
+    <color name="dark_gray">#FF2B343D</color>
+    <color name="black">#0D131A</color>
+    <color name="text_gray">#5A6570</color>
+    <color name="date_gray">#797979</color>
+
+    <color name="color_accent">#0cc4ac</color>
+
 </resources>
