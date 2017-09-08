@@ -61,43 +61,56 @@ public class DataService {
         AppMain.getAppContext().sendBroadcast(i);
     }
 
-//    public MovieData getMovieData(Integer id) {
-//        if(m_MovieDataCache.containsKey(id)) {
-//            return m_MovieDataCache.get(id);
-//        }
-//        return null;
-//    }
-    public UUID fetchMovieData(Integer id) {
-        UUID uuid = UUID.randomUUID();
-//        "w92", "w154", "w185","w342", "w500", "w780", or "original"
-//        http://image.tmdb.org/t/p/w185/bOXBV303Fgkzn2K4FeKDc0O31q4.jpg
-        try {
-            //https://api.themoviedb.org/3/movie/374720?api_key=437c0161cd02c1361b4f6d2446c3e376
-            //String servicePath = "movie/".concat(id.toString()).concat("?api_key=437c0161cd02c1361b4f6d2446c3e376");
-            String servicePath = "movie/" + id.toString() + "?api_key=437c0161cd02c1361b4f6d2446c3e376";
-            String payloadData = null; //new Gson().toJson(new LoginDto(userId,userPwd));
-            final String taskName = "Fetch Movie";
-            DataServiceFetch dataSyncAction = new DataServiceFetch(m_BasePath+servicePath,
-                    null, payloadData, false);
-            DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
-            dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
-                @Override
-                public void onResponse(IRESTResponse response) {
-                    Log.d(getClass().toString(), "Executing Response Handler for " + taskName);
-                    //processMovieFetchResponse(response);
-                }
-            });
-            Log.d(getClass().toString(), "Executing Login");
-            dataSyncTask.execute();
-        }
-        catch (Exception x) {
-            Log.e(this.getClass().toString(), x.getMessage());
-        }
-        return uuid;
-    }
     public List<DTO.MoviesListItem> getMoviesData() {
         return m_MoviesList;
     }
+
+    public DTO.MoviesListItem getMovieData(Integer id) {
+        DTO.MoviesListItem movie = null;
+        if(m_MoviesList!=null) {
+            movie = m_MoviesList.stream()       //From
+                    .filter(m->m.getId()==id)   //Where
+                    .findFirst().orElse(null);  //Select
+        }
+        return movie;
+    }
+    public UUID fetchMovieData(Integer id) {
+        //Currently unclear if all movie data can be obtained from the list of movies
+        //fetched or if a subesquent RESTful call is needed to acquire all detail
+        //This function serves as a placeholder until this determination can be made
+        //"ItemFetchSuccess" is always broadcast and the actual code to perfrom an
+        //individual movie fetch is below commented.
+        HashMap<String, String> extras = new HashMap<String, String>();
+        extras.put(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString(), id.toString());
+        broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType.ItemFetchSuccess, extras);
+        return UUID.randomUUID();
+
+//        UUID uuid = UUID.randomUUID();
+//        try {
+//            //https://api.themoviedb.org/3/movie/374720?api_key=437c0161cd02c1361b4f6d2446c3e376
+//            //String servicePath = "movie/".concat(id.toString()).concat("?api_key=437c0161cd02c1361b4f6d2446c3e376");
+//            String servicePath = "movie/" + id.toString() + "?api_key=437c0161cd02c1361b4f6d2446c3e376";
+//            String payloadData = null; //new Gson().toJson(new LoginDto(userId,userPwd));
+//            final String taskName = "Fetch Movie";
+//            DataServiceFetch dataSyncAction = new DataServiceFetch(m_BasePath+servicePath,
+//                    null, payloadData, false);
+//            DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
+//            dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
+//                @Override
+//                public void onResponse(IRESTResponse response) {
+//                    Log.d(getClass().toString(), "Executing Response Handler for " + taskName);
+//                    //processMovieFetchResponse(response);
+//                }
+//            });
+//            Log.d(getClass().toString(), "Executing Login");
+//            dataSyncTask.execute();
+//        }
+//        catch (Exception x) {
+//            Log.e(this.getClass().toString(), x.getMessage());
+//        }
+//        return uuid;
+    }
+
     public UUID fetchMoviesData() {
         UUID uuid = UUID.randomUUID();
         try {
@@ -125,43 +138,6 @@ public class DataService {
         return uuid;
     }
 
-//
-//    void processMovieFetchResponse(IRESTResponse restResponse) {
-//        boolean bProcessingCompleted = false;
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-//            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//            mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-//
-//            Response response = restResponse.getResponse();
-//            if(response!=null) {
-//                String jsonData = response.body().string();
-//                MovieData fetchResult = mapper.readValue(jsonData, MovieData.class);
-//                if (fetchResult != null) {
-//                    Integer movieId = fetchResult.getId();
-//                    if (m_MovieDataCache.containsKey(movieId)) {
-//                        m_MovieDataCache.replace(movieId, fetchResult);
-//                    } else {
-//                        m_MovieDataCache.put(movieId, fetchResult);
-//                    }
-//                    HashMap<String, String> extras = new HashMap<String, String>();
-//                    extras.put(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString(), movieId.toString());
-//                    broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType.ItemFetchSuccess, extras);
-//                }
-//            }
-//            else {
-//                broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType.ItemFetchFail, null);
-//            }
-//            bProcessingCompleted = true;
-//        }
-//        catch (Exception x) {
-//            Log.e(getClass().toString(),x.getMessage());
-//        }
-//        if(bProcessingCompleted==false) {
-//            broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType.ItemFetchFail, null);
-//        }
-//    }
     void processMoviesListFetchResponse(IRESTResponse restResponse) {
         boolean bProcessingCompleted = false;
         try {
