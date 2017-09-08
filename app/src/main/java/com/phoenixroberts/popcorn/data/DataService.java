@@ -66,11 +66,20 @@ public class DataService {
     }
 
     public DTO.MoviesListItem getMovieData(Integer id) {
+        //324852
         DTO.MoviesListItem movie = null;
-        if(m_MoviesList!=null) {
-            movie = m_MoviesList.stream()       //From
-                    .filter(m->m.getId()==id)   //Where
-                    .findFirst().orElse(null);  //Select
+        try {
+            if (m_MoviesList != null) {
+                movie = m_MoviesList.stream()       //From
+                        .filter(m -> m.getId() == id)   //Where
+                        .findFirst().orElse(null);  //Select
+            }
+        }
+        catch(Exception x) {
+            Log.d(getClass().toString(),x.getMessage());
+        }
+        if (movie != null) {
+
         }
         return movie;
     }

@@ -20,20 +20,6 @@
                 android:theme="@style/ToolBarStyle"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"/>
-            <LinearLayout
-                android:id="@+id/mentorViewToggle"
-                android:visibility="visible"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/commercial_badge_color"
-                android:orientation="vertical">
-                <Spinner
-                    android:layout_gravity="end"
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                </Spinner>
-            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
 
@@ -43,12 +29,3 @@
             android:id="@+id/content_frame" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
-    <!--
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/fragment"
-              android:name="demo.example.com.customarrayadapter.FlavorGridFragment"
-              tools:layout="@layout/fragment_main"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"/>
-    -->

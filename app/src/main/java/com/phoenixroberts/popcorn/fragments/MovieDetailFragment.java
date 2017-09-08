@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
+import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.squareup.picasso.Picasso;
 
@@ -44,11 +45,11 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
     }
 
     private void processClick() {
-//        MovieData movieData = DataService.getInstance().getMovieData(m_MovieId);
-//        Toast.makeText(this.getActivity(), "\n  " + movieData.getPosterPath() + "  \n", Toast.LENGTH_SHORT).show();
-//        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
-//        ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
-//        loadImage(imageView, sUrlPath);
+        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(m_MovieId);
+        Toast.makeText(this.getActivity(), "\n  " + movieData.getPosterPath() + "  \n", Toast.LENGTH_SHORT).show();
+        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
+        ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
+        loadImage(imageView, sUrlPath);
     }
 
     private void loadImage(ImageView imageView, String sUrlPath) {

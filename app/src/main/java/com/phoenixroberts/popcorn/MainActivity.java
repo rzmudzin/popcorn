@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
     public void onDataServiceResult(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, Intent i) {
         //If the status dialog is displayed close it
         m_StatusDialog.dismissDialog();
+        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(324852);
+        if(movieData!=null) {
+
+        }
     }
 
     @Override
