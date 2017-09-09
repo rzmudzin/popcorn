@@ -24,6 +24,7 @@ public class AppMain extends Application {
         return AppMain.context;
     }
 
+
     public static class BundleExtraType {
         public static final String MovieId = "MovieId";
     }

@@ -9,20 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
-import com.phoenixroberts.popcorn.IDataServiceListener;
+import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
-import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Created by robz on 9/7/17.
@@ -45,24 +39,15 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
         m_MovieId = movieId;
     }
 
-    private void processClick() {
-        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(m_MovieId);
-        Toast.makeText(this.getActivity(), "\n  " + movieData.getPosterPath() + "  \n", Toast.LENGTH_SHORT).show();
-        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
-        ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
-        loadImage(imageView, sUrlPath);
-    }
-
     private void loadImage(ImageView imageView, String sUrlPath) {
         try {
-            URL url = new URL(sUrlPath);
             Uri uri = Uri.parse(sUrlPath);
             Picasso.with(getActivity())
                     .load(uri)
-                    //.resize(imageView.getWidth(),imageView.getHeight())
+                    .placeholder(R.drawable.popcorn)
                     .into(imageView);
         }
-        catch(IOException x) {
+        catch(Exception x) {
             Log.e(getClass().toString(),x.getMessage());
         }
     }
@@ -94,26 +79,15 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
 
     @Override
     public void onClick(View view) {
-        processClick();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         m_RootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
-        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(m_MovieId);
-        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
         ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
-        loadImage(imageView, sUrlPath);
-
-//        Button clickMe = (Button)m_RootView.findViewById(R.id.clickMe);
-//        if(clickMe!=null) {
-//            Log.d(getClass().toString(),"Adding Click Listener");
-//            clickMe.setOnClickListener(this);
-//        }
-
+        loadImage(imageView, DataService.getInstance().getMovieDetailPosterPath(m_MovieId));
         return m_RootView;
     }
 

@@ -13,8 +13,8 @@
     <color name="alert_red">#b40000</color>
     <color name="light_red">#F7d9d9</color>
 
-    <color name="servpro_green">#4EA135</color>
-    <color name="servpro_green_accent">#4EA135</color>
+    <color name="app_primary_color">#4EA135</color>
+    <color name="app_accent_color">#4EA135</color>
     <color name="warning_cell_background">#FFFFEB</color>
     <color name="success_cell_background">#EBFFEB</color>
     <color name="error_cell_background">#F7d9d9</color>
@@ -27,7 +27,6 @@
     <color name="menu_header_background">#CECECE</color>
     <color name="menu_background_color">#EFEEF4</color>
     <color name="menu_text">#3B3A3C</color>
-    <!-- <color name="note_background_color">#FFFAED</color> -->
     <color name="note_background_color">#FFFFFF</color>
 
 

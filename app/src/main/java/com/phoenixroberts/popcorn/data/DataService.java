@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
-import com.phoenixroberts.popcorn.DataSync;
+import com.phoenixroberts.popcorn.threading.DataSync;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,10 +38,21 @@ import okhttp3.Response;
 
 public class DataService {
     private static DataService m_DataService = new DataService();
-    private String m_BasePath = "https://api.themoviedb.org/3/";
-    private String m_APIToken = "";
+    private String m_MediaServiceBasePath = "http://image.tmdb.org/t/p/";
+    private String m_DataServiceBasePath = "https://api.themoviedb.org/3/";
+    String m_MovieListService = "discover/movie?api_key=";
+    private String m_APIToken = "437c0161cd02c1361b4f6d2446c3e376";
     private List<DTO.MoviesListItem> m_MoviesList = new ArrayList<DTO.MoviesListItem>();
-    //private HashMap<Integer,MovieData> m_MovieDataCache = new HashMap<Integer,MovieData>();
+
+    public static class PosterSize {
+        public static final String W92 = "w92";
+        public static final String W154 = "w154";
+        public static final String W185 = "w185";
+        public static final String W342 = "w342";
+        public static final String W500 = "w500";
+        public static final String W780 = "w780";
+        public static final String Original = "original";
+    }
 
     private DataService() {
 
@@ -61,30 +72,68 @@ public class DataService {
         AppMain.getAppContext().sendBroadcast(i);
     }
 
+    public String getMovieGridPosterPath(Integer movieId) {
+        return getPosterPath(movieId, PosterSize.W500);
+    }
+    public String getMovieDetailPosterPath(Integer movieId) {
+        return getPosterPath(movieId, PosterSize.W500);
+    }
+    public String getPosterPath(Integer movieId, String posterSize) {
+        DTO.MoviesListItem movie = getMovieData(movieId);
+        String sUrlPath = m_MediaServiceBasePath + posterSize + movie.getPosterPath();
+        return sUrlPath;
+    }
+
     public List<DTO.MoviesListItem> getMoviesData() {
         return m_MoviesList;
     }
 
     public DTO.MoviesListItem getMovieData(Integer id) {
-        //211672
         DTO.MoviesListItem movie = null;
         try {
             if (m_MoviesList != null) {
-                movie = m_MoviesList.stream()                               //From
+                movie = m_MoviesList.stream()                              //From
                         .filter(m -> {                                      //Where
                             return m.getId().equals(id);
                         })
                         .findFirst().orElse(null);                          //Select
-                Log.d(getClass().toString(),"Operation Completed");
             }
         }
         catch(Exception x) {
-            Log.d(getClass().toString(),x.getMessage());
-        }
-        if (movie != null) {
-
+            Log.e(getClass().toString(),x.getMessage());
         }
         return movie;
+    }
+
+    public UUID fetchMoviesData() {
+        UUID uuid = UUID.randomUUID();
+        try {
+            String language = "&language=en-US";
+            String sortOrder = "&sort_by=popularity.desc";
+            String filter = "&include_adult=false&include_video=false";
+            String page = "&page=1";
+
+            String queryString = language+sortOrder+filter+page;
+            String servicePath = m_MovieListService + m_APIToken + queryString;
+            String payloadData = null; //Json payload to send
+            final String taskName = "Fetch Movies";
+            DataServiceFetch dataSyncAction = new DataServiceFetch(m_DataServiceBasePath+ servicePath,
+                    null, payloadData, false);
+            DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
+            dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
+                @Override
+                public void onResponse(IRESTResponse response) {
+                    Log.d(getClass().toString(), "Executing Response Handler for " + taskName);
+                    processMoviesListFetchResponse(response);
+                }
+            });
+            Log.d(getClass().toString(), "Executing Login");
+            dataSyncTask.execute();
+        }
+        catch (Exception x) {
+            Log.e(this.getClass().toString(), x.getMessage());
+        }
+        return uuid;
     }
     public UUID fetchMovieData(Integer id) {
         //Currently unclear if all movie data can be obtained from the list of movies
@@ -104,7 +153,7 @@ public class DataService {
 //            String servicePath = "movie/" + id.toString() + "?api_key=437c0161cd02c1361b4f6d2446c3e376";
 //            String payloadData = null; //new Gson().toJson(new LoginDto(userId,userPwd));
 //            final String taskName = "Fetch Movie";
-//            DataServiceFetch dataSyncAction = new DataServiceFetch(m_BasePath+servicePath,
+//            DataServiceFetch dataSyncAction = new DataServiceFetch(m_DataServiceBasePath+servicePath,
 //                    null, payloadData, false);
 //            DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
 //            dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
@@ -122,34 +171,6 @@ public class DataService {
 //        }
 //        return uuid;
     }
-
-    public UUID fetchMoviesData() {
-        UUID uuid = UUID.randomUUID();
-        try {
-            //https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&api_key=437c0161cd02c1361b4f6d2446c3e376&
-            //discover/movie?api_key=437c0161cd02c1361b4f6d2446c3e376&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
-            String servicePath = "discover/movie?api_key=437c0161cd02c1361b4f6d2446c3e376&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1";
-            String payloadData = null; //new Gson().toJson(new LoginDto(userId,userPwd));
-            final String taskName = "Fetch Movies";
-            DataServiceFetch dataSyncAction = new DataServiceFetch(m_BasePath+servicePath,
-                    null, payloadData, false);
-            DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
-            dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
-                @Override
-                public void onResponse(IRESTResponse response) {
-                    Log.d(getClass().toString(), "Executing Response Handler for " + taskName);
-                    processMoviesListFetchResponse(response);
-                }
-            });
-            Log.d(getClass().toString(), "Executing Login");
-            dataSyncTask.execute();
-        }
-        catch (Exception x) {
-            Log.e(this.getClass().toString(), x.getMessage());
-        }
-        return uuid;
-    }
-
     void processMoviesListFetchResponse(IRESTResponse restResponse) {
         boolean bProcessingCompleted = false;
         try {
@@ -318,86 +339,5 @@ public class DataService {
         }
     }
 
-    class AsyncDataTask extends AsyncTask<Void, Integer, Void> {  //Params, Progress, Result
-        OkHttpClient client = new OkHttpClient();
-        String m_UrlString = null;
-        String m_PayloadData = null;
-        boolean m_IsPostRequest = false;
-        HashMap<String,String> m_Headers;
-
-        public AsyncDataTask(String urlString) {
-            super();
-            m_UrlString=urlString;
-        }
-        public AsyncDataTask(String urlString, HashMap<String,String> headers) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-        }
-        public AsyncDataTask(String urlString, HashMap<String,String> headers, String payloadData) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-            m_PayloadData=payloadData;
-        }
-        public AsyncDataTask(String urlString, HashMap<String,String> headers, String payloadData, boolean isPostRequest) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-            m_PayloadData=payloadData;
-            m_IsPostRequest=isPostRequest;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                if(m_IsPostRequest) {
-                    executePost(m_UrlString);
-                }
-                else {
-                    executeGet(m_UrlString);
-                }
-            }
-            catch(Exception x) {
-                Log.d("Exception", x.getMessage());
-            }
-            return null;
-        }
-        private void executeGet(String url) throws IOException {
-            Request.Builder requestBuilder = new Request.Builder();
-            requestBuilder.url(url);
-            Request request = requestBuilder.build();
-            Response response = client.newCall(request).execute();
-            if(response.isSuccessful()) {
-                //DataService.this
-            }
-        }
-        private String executePost(String url) throws IOException {
-
-            Request.Builder requestBuilder = new Request.Builder();
-            requestBuilder.url(url);
-            if(m_PayloadData != null) {
-                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), m_PayloadData);
-                requestBuilder.post(body);
-            }
-            if(m_Headers!=null) {
-                for(String key : m_Headers.keySet()) {
-                    String keyValue = m_Headers.get(key);
-                    requestBuilder.addHeader(key,keyValue);
-                }
-            }
-            Request request = requestBuilder.build();
-            Response response = client.newCall(request).execute();
-
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-
-            String jsonData = response.body().string();
-
-            return response.body().string();
-        }
-    }
 }
 

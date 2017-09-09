@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,8 +12,7 @@ import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
-
-import uk.co.deanwild.flowtextview.FlowTextView;
+import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     StatusDialog m_StatusDialog;
@@ -23,37 +20,29 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wrapit);
+        setContentView(R.layout.activity_main);
 
-
-        FlowTextView flowTextView = (FlowTextView) findViewById(R.id.ftv);
-        Spanned html = Html.fromHtml("<html>Your html stuff goes here....lots of text, various crap to put here of no particular consequense. Really though it needs to go wel beyond this amount of text... I mean it is going to take a LOT of text fo have this wrap even one image much less both. The amount of text up to this point is maybe half what is need, maybe mot even that much. That being the case we need to add more text and not just a little bit or even a good size amount but a LOT more (and yes I capitlized that word twice in this context). Hopefully in the end all this foolishness provides working exmaple of text wrapping around multiple images. And that's all I got to say about that!</html>");
-        flowTextView.setText(html);
-
-
-        //setContentView(R.layout.activity_main);
-
-//        DataServiceBroadcastReceiver.getInstance().addListener(this);
-//        Toolbar toolbarInstance = (Toolbar)findViewById(R.id.toolbar_top);
-//        setSupportActionBar(toolbarInstance);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
-//                new MovieGridFragment()).commit();
-//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//            @Override
-//            public void onBackStackChanged() {
-//                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                } else {
-//                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//                }
-//            }
-//        });
-//        if(savedInstanceState==null) {
-//            m_StatusDialog = new StatusDialog(new StatusDialog.ShowStatusRequest(this, true, "Loading",
-//                    StatusDialog.MaskType.Black, true));
-//            m_StatusDialog.showDialog();
-//            DataService.getInstance().fetchMoviesData();
-//        }
+        DataServiceBroadcastReceiver.getInstance().addListener(this);
+        Toolbar toolbarInstance = (Toolbar)findViewById(R.id.toolbar_top);
+        setSupportActionBar(toolbarInstance);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,
+                new MovieGridFragment()).commit();
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } else {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+            }
+        });
+        if(savedInstanceState==null) {
+            m_StatusDialog = new StatusDialog(new StatusDialog.ShowStatusRequest(this, true, "Loading",
+                    StatusDialog.MaskType.Black, true));
+            m_StatusDialog.showDialog();
+            DataService.getInstance().fetchMoviesData();
+        }
     }
 
     @Override

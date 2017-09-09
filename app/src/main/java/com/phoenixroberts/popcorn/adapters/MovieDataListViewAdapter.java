@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
@@ -78,23 +79,20 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
     View populateMovieGrid(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if(v==null) {
-            v = LayoutInflater.from(m_Context).inflate(R.layout.movie_item, parent, false);
+            v = LayoutInflater.from(m_Context).inflate(R.layout.movie_grid_item, parent, false);
             ImageView movieImage = (ImageView)v.findViewById(R.id.movie_image);
             movieImage.setOnClickListener(this);
             v.setTag(new MovieDataItemViewHolder(
-                    (TextView)v.findViewById(R.id.movie_title),
+                    null,
                     (TextView)v.findViewById(R.id.movieDataItemId),
                     movieImage
             ));
         }
         MovieDataItemViewHolder movieDataViewHolder = (MovieDataItemViewHolder)v.getTag();
-        movieDataViewHolder.getMovieTitle().setText(m_MoviesData.get(position).getTitle());
         movieDataViewHolder.getMovieImage().setTag(m_MoviesData.get(position).getId().toString());
-        //movieDataViewHolder.getMovieId().setText(Integer.toString(m_MoviesData.get(position).getId()));
-
-        String sUrlPath = "http://image.tmdb.org/t/p/w185" + m_MoviesData.get(position).getPosterPath();
+        //String sUrlPath = "http://image.tmdb.org/t/p/" + DataService.PosterSize.W500 + m_MoviesData.get(position).getPosterPath();
+        String sUrlPath = DataService.getInstance().getMovieGridPosterPath(m_MoviesData.get(position).getId());
         loadImage(movieDataViewHolder.getMovieImage(), sUrlPath);
-
         return v;
     }
 

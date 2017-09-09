@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
-import com.phoenixroberts.popcorn.IDataServiceListener;
+import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.adapters.MovieDataListViewAdapter;
 import com.phoenixroberts.popcorn.data.DTO;
@@ -35,7 +35,7 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
 
         List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
         m_ListViewAdapter = new MovieDataListViewAdapter(this.getActivity(),
-                moviesData!=null?moviesData:new ArrayList<DTO.MoviesListItem>(), R.layout.movie_item);
+                moviesData!=null?moviesData:new ArrayList<DTO.MoviesListItem>(), R.layout.movie_grid_item);
 
         // Get a reference to the ListView, and attach this adapter to it.
         GridView gridView = (GridView) v.findViewById(R.id.movies_grid);
