@@ -13,6 +13,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.networking.DataServiceFetch;
+import com.phoenixroberts.popcorn.networking.IFetchResponseHandler;
+import com.phoenixroberts.popcorn.networking.IRESTResponse;
+import com.phoenixroberts.popcorn.networking.RESTResponse;
 import com.phoenixroberts.popcorn.threading.DataSync;
 
 import java.io.IOException;
@@ -207,137 +211,5 @@ public class DataService {
             broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType.ListFetchFail, null);
         }
     }
-
-    interface IRESTResponse {
-        Response getResponse();
-        void setResponse(Response response);
-        Exception getExeception();
-        void setException(Exception x);
-    }
-    class RESTResponse implements IRESTResponse {
-        private Response m_Response;
-        private Exception m_Exception;
-
-        public RESTResponse() {
-
-        }
-        public RESTResponse(Response response) {
-            m_Response=response;
-        }
-        public RESTResponse(Response response, Exception x) {
-            m_Response=response;
-            m_Exception=x;
-        }
-        public Response getResponse() { return m_Response; }
-        public void setResponse(Response response) { m_Response=response; }
-        public Exception getExeception() { return m_Exception; }
-        public void setException(Exception x) { m_Exception=x; }
-    }
-    interface IFetchResponseHandler {
-        void onResponse(IRESTResponse response);
-    }
-    class DataServiceFetch implements DataSync.IDataSyncAction
-    {
-        String m_UrlString = null;
-        String m_PayloadData = null;
-        boolean m_IsPostRequest = false;
-        HashMap<String,String> m_Headers;
-        IFetchResponseHandler m_FetchResponseHandler;
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-
-
-        public DataServiceFetch(String urlString) {
-            super();
-            m_UrlString=urlString;
-        }
-        public DataServiceFetch(String urlString, HashMap<String,String> headers) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-        }
-        public DataServiceFetch(String urlString, HashMap<String,String> headers, String payloadData) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-            m_PayloadData=payloadData;
-        }
-        public DataServiceFetch(String urlString, HashMap<String,String> headers, String payloadData, boolean isPostRequest) {
-            super();
-            m_UrlString=urlString;
-            m_Headers=headers;
-            m_PayloadData=payloadData;
-            m_IsPostRequest=isPostRequest;
-        }
-
-        public IFetchResponseHandler getResponseHandler() {
-            return m_FetchResponseHandler;
-        }
-        public void setResponseHandler(IFetchResponseHandler fetchResponseHandler) {
-            m_FetchResponseHandler=fetchResponseHandler;
-        }
-
-
-        @Override
-        public void execute() {
-            RESTResponse response = new RESTResponse();
-            try {
-                //Execute a login request...
-                response.setResponse(m_IsPostRequest==true?executePost(m_UrlString):executeGet(m_UrlString));
-            } catch (Exception x) {
-                response.setException(x);
-            }
-            if(m_FetchResponseHandler!=null) {
-                m_FetchResponseHandler.onResponse(response);
-            }
-        }
-
-        @Override
-        public void cancel() {
-
-        }
-
-        private Response executeGet(String url) throws IOException {
-
-            Request.Builder requestBuilder = new Request.Builder().get();
-            requestBuilder.url(url);
-//            if(m_PayloadData != null) {
-//                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), m_PayloadData);
-//                requestBuilder.post(body);
-//            }
-            if(m_Headers!=null) {
-                for(String key : m_Headers.keySet()) {
-                    String keyValue = m_Headers.get(key);
-                    requestBuilder.addHeader(key,keyValue);
-                }
-            }
-            Request request = requestBuilder.build();
-            Response response = client.newCall(request).execute();
-            return response;
-        }
-
-        private Response executePost(String url) throws IOException {
-
-            Request.Builder requestBuilder = new Request.Builder();
-            requestBuilder.url(url);
-            if(m_PayloadData != null) {
-                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), m_PayloadData);
-                requestBuilder.post(body);
-            }
-            if(m_Headers!=null) {
-                for(String key : m_Headers.keySet()) {
-                    String keyValue = m_Headers.get(key);
-                    requestBuilder.addHeader(key,keyValue);
-                }
-            }
-            Request request = requestBuilder.build();
-            Response response = client.newCall(request).execute();
-            return response;
-        }
-    }
-
 }
 
