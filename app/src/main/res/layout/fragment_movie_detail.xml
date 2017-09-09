@@ -6,6 +6,20 @@
     tools:context="com.phoenixroberts.popcorn.fragments.MovieDetailFragment">
 
     <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:layout_gravity="center">
+        <TextView
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:text="Pirates of the Caribbean"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+    </LinearLayout>
+    <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_width="match_parent"
