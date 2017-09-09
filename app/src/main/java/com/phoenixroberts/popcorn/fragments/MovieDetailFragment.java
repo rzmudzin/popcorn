@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
@@ -57,8 +58,9 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
             URL url = new URL(sUrlPath);
             Uri uri = Uri.parse(sUrlPath);
             Picasso.with(getActivity())
-                    .load(uri).into(imageView);
-//                    .resize(width,height).into(imageView);
+                    .load(uri)
+                    //.resize(imageView.getWidth(),imageView.getHeight())
+                    .into(imageView);
         }
         catch(IOException x) {
             Log.e(getClass().toString(),x.getMessage());
@@ -78,7 +80,16 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null) {
+            m_MovieId = savedInstanceState.getInt(AppMain.BundleExtraType.MovieId, m_MovieId);
+        }
         DataServiceBroadcastReceiver.getInstance().addListener(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(AppMain.BundleExtraType.MovieId, m_MovieId);
     }
 
     @Override
@@ -92,17 +103,16 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
         // Inflate the layout for this fragment
         m_RootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-//        MovieData movieData = DataService.getInstance().getMovieData(m_MovieId);
-//        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
-//        ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
-//        loadImage(imageView, sUrlPath);
+        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(m_MovieId);
+        String sUrlPath = "http://image.tmdb.org/t/p/w185" + movieData.getPosterPath();
+        ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
+        loadImage(imageView, sUrlPath);
 
-        Button clickMe = (Button)m_RootView.findViewById(R.id.clickMe);
-        if(clickMe!=null) {
-            Log.d(getClass().toString(),"Adding Click Listener");
-            //clickMe.setOnClickListener(view -> processClick());
-            clickMe.setOnClickListener(this);
-        }
+//        Button clickMe = (Button)m_RootView.findViewById(R.id.clickMe);
+//        if(clickMe!=null) {
+//            Log.d(getClass().toString(),"Adding Click Listener");
+//            clickMe.setOnClickListener(this);
+//        }
 
         return m_RootView;
     }
