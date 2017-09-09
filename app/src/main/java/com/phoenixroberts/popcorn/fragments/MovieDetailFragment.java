@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DataService;
@@ -85,7 +87,15 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        DTO.MoviesListItem movie = DataService.getInstance().getMovieData(m_MovieId);
         m_RootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        TextView title = (TextView)m_RootView.findViewById(R.id.title);
+        title.setText(movie.getTitle());
+        TextView description = (TextView)m_RootView.findViewById(R.id.description);
+        description.setText(movie.getOverview());
+        TextView year = (TextView)m_RootView.findViewById(R.id.year);
+        year.setText(movie.getReleaseDate());
         ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
         loadImage(imageView, DataService.getInstance().getMovieDetailPosterPath(m_MovieId));
         return m_RootView;

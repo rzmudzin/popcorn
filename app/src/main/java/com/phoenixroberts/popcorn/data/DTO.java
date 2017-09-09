@@ -1,5 +1,7 @@
 package com.phoenixroberts.popcorn.data;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
@@ -80,6 +82,7 @@ public class DTO {
         private Boolean adult;
         private String overview;
         private String releaseDate;
+        private Integer runtime;
         private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
         public MoviesListItem() {}
@@ -194,21 +197,36 @@ public class DTO {
             this.overview = overview;
         }
 
+        @JsonProperty("release_date")
         public String getReleaseDate() {
             return releaseDate;
         }
 
+        @JsonProperty("release_date")
         public void setReleaseDate(String releaseDate) {
             this.releaseDate = releaseDate;
         }
 
+        @JsonProperty("runtime")
+        public Integer getRuntime() {
+            return runtime;
+        }
+
+        @JsonProperty("runtime")
+        public void setRuntime(Integer runtime) {
+            this.runtime = runtime;
+        }
+
+        @JsonAnyGetter
         public Map<String, Object> getAdditionalProperties() {
             return this.additionalProperties;
         }
 
+        @JsonAnySetter
         public void setAdditionalProperty(String name, Object value) {
             this.additionalProperties.put(name, value);
         }
+
 
     }
 }
