@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.phoenixroberts.popcorn.activities.MainActivity;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
@@ -18,6 +22,7 @@ import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,11 +31,19 @@ import java.util.List;
 
 public class MovieGridFragment extends Fragment implements IDataServiceListener {
 
+    private List<Integer> m_ToolbarFilter = new ArrayList<Integer>();
     private MovieDataListViewAdapter m_ListViewAdapter;
+
+    public MovieGridFragment() {
+        m_ToolbarFilter = new ArrayList<Integer>(Arrays.asList(new Integer [] {
+                R.id.settingsMenuOption, R.id.sortOrderMenuOption
+        }));
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
         List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
@@ -62,7 +75,43 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        ((MainActivity)getActivity()).setToolbarFilter(m_ToolbarFilter);
         DataServiceBroadcastReceiver.getInstance().addListener(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+        for(int i=0; i<menu.size(); ++i) {
+            MenuItem menuItem = menu.getItem(i);
+            if(m_ToolbarFilter.contains(menuItem.getItemId())) {
+                menuItem.setVisible(true);
+            }
+            else {
+                menuItem.setVisible(false);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getActivity().onBackPressed();
+            }
+            case R.id.settingsMenuOption: {
+                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case R.id.sortOrderMenuOption: {
+                Toast.makeText(getActivity(), "Sort Order", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onDataServiceResult(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, Intent i) {

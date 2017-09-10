@@ -17,7 +17,12 @@ import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
+    Menu m_Menu;
     StatusDialog m_StatusDialog;
 
     @Override
@@ -62,33 +67,5 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
         if(movieData!=null) {
 
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                this.onBackPressed();
-            }
-            case R.id.settingsMenuOption: {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
-                break;
-            }
-            case R.id.sortOrderMenuOption: {
-                Toast.makeText(this, "Sort Order", Toast.LENGTH_SHORT).show();
-                break;
-            }
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

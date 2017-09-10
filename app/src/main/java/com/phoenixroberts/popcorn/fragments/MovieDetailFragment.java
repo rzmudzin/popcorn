@@ -7,18 +7,27 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.phoenixroberts.popcorn.AppMain;
+import com.phoenixroberts.popcorn.activities.MainActivity;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by robz on 9/7/17.
@@ -54,6 +63,18 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getActivity().onBackPressed();
+            }
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void onDataServiceResult(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, Intent i) {
 
     }
@@ -85,9 +106,8 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         DTO.MoviesListItem movie = DataService.getInstance().getMovieData(m_MovieId);
         m_RootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         TextView title = (TextView)m_RootView.findViewById(R.id.title);
@@ -102,6 +122,5 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
         loadImage(imageView, DataService.getInstance().getMovieDetailPosterPath(m_MovieId));
         return m_RootView;
     }
-
 
 }
