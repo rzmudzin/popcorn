@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.adapters.MovieDataListViewAdapter;

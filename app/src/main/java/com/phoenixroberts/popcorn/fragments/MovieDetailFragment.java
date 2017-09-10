@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.phoenixroberts.popcorn.AppMain;
-import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
@@ -96,6 +96,8 @@ public class MovieDetailFragment extends Fragment implements IDataServiceListene
         description.setText(movie.getOverview());
         TextView year = (TextView)m_RootView.findViewById(R.id.year);
         year.setText(movie.getReleaseDate());
+        TextView userRating = (TextView)m_RootView.findViewById(R.id.user_rating);
+        userRating.setText(movie.getVoteAverage().toString());
         ImageView imageView = (ImageView)m_RootView.findViewById(R.id.movieImage);
         loadImage(imageView, DataService.getInstance().getMovieDetailPosterPath(m_MovieId));
         return m_RootView;

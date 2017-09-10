@@ -91,10 +91,12 @@ public class DTO {
             id=Id;
         }
 
+        @JsonProperty("vote_count")
         public Integer getVoteCount() {
             return voteCount;
         }
 
+        @JsonProperty("vote_count")
         public void setVoteCount(Integer voteCount) {
             this.voteCount = voteCount;
         }
@@ -115,10 +117,12 @@ public class DTO {
             this.video = video;
         }
 
+        @JsonProperty("vote_average")
         public Double getVoteAverage() {
             return voteAverage;
         }
 
+        @JsonProperty("vote_average")
         public void setVoteAverage(Double voteAverage) {
             this.voteAverage = voteAverage;
         }

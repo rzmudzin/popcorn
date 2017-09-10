@@ -1,4 +1,4 @@
-package com.phoenixroberts.popcorn;
+package com.phoenixroberts.popcorn.activities;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
+import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
@@ -74,6 +77,14 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
         switch (item.getItemId()) {
             case android.R.id.home: {
                 this.onBackPressed();
+            }
+            case R.id.settingsMenuOption: {
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case R.id.sortOrderMenuOption: {
+                Toast.makeText(this, "Sort Order", Toast.LENGTH_SHORT).show();
+                break;
             }
             default:
                 break;

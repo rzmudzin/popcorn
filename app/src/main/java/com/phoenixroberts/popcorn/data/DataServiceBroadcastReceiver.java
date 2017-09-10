@@ -1,4 +1,4 @@
-package com.phoenixroberts.popcorn;
+package com.phoenixroberts.popcorn.data;
 
 
 import android.content.BroadcastReceiver;

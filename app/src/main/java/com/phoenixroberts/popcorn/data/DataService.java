@@ -5,18 +5,15 @@ package com.phoenixroberts.popcorn.data;
  */
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phoenixroberts.popcorn.AppMain;
-import com.phoenixroberts.popcorn.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.networking.DataServiceFetch;
 import com.phoenixroberts.popcorn.networking.IFetchResponseHandler;
 import com.phoenixroberts.popcorn.networking.IRESTResponse;
-import com.phoenixroberts.popcorn.networking.RESTResponse;
 import com.phoenixroberts.popcorn.threading.DataSync;
 
 import java.io.IOException;
@@ -24,12 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**

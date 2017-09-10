@@ -7,6 +7,8 @@ package com.phoenixroberts.popcorn;
 import android.app.Application;
 import android.content.Context;
 
+import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
+
 
 public class AppMain extends Application {
 
