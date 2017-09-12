@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.phoenixroberts.popcorn.activities.MainActivity;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.dialogs.DialogService;
+import com.phoenixroberts.popcorn.dialogs.Dialogs;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.adapters.MovieDataListViewAdapter;
@@ -101,7 +103,9 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 getActivity().onBackPressed();
             }
             case R.id.settingsMenuOption: {
-                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
+                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+                        "Simple Test Dialog", "A Message", "Ok", null));
                 break;
             }
             case R.id.sortOrderMenuOption: {

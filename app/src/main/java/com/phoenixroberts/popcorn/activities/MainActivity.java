@@ -21,6 +21,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+//1) Settings and preferences
+//2) Sorting
+//3) Scroll view on detail screen
+//4) Popup dialogs
+
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;
     StatusDialog m_StatusDialog;

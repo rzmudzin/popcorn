@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:showDividers="none"
+    android:background="@drawable/roundedrectangle"
+    android:paddingBottom="0dp"
+    android:backgroundTintMode="src_over"
+    android:backgroundTint="#02ffffff">
+    <TextView
+        android:text="Check Out Job"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:textSize="19dp"
+        android:textColor="#ff000000"
+        android:textStyle="normal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:padding="8dp" />
+    <TextView
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/message"
+        android:textSize="15dp"
+        android:textColor="#ff000000"
+        android:gravity="center"
+        android:layout_marginBottom="0dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="OK"
+            android:stateListAnimator="@null"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/okButton"
+            android:textAllCaps="true"
+            android:backgroundTint="#ffffffff"
+            android:textColor="@color/alert_red"
+            android:textSize="19dp"
+            android:paddingTop="24dp"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="20dp"
+            android:shadowColor="#00ffffff" />
+    </LinearLayout>
+</LinearLayout>
