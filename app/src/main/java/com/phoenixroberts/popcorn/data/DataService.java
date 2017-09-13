@@ -11,12 +11,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phoenixroberts.popcorn.AppMain;
+import com.phoenixroberts.popcorn.AppSettings;
 import com.phoenixroberts.popcorn.networking.DataServiceFetch;
 import com.phoenixroberts.popcorn.networking.IFetchResponseHandler;
 import com.phoenixroberts.popcorn.networking.IRESTResponse;
 import com.phoenixroberts.popcorn.threading.DataSync;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,19 +42,58 @@ public class DataService {
     String m_MovieListService = "discover/movie?api_key=";
     private String m_APIToken = "437c0161cd02c1361b4f6d2446c3e376";
     private List<DTO.MoviesListItem> m_MoviesList = new ArrayList<DTO.MoviesListItem>();
+    private String m_DefaultSortOrder;
 
-    public static class PosterSize {
+    public static class PosterSize {  //2:3
         public static final String W92 = "w92";
         public static final String W154 = "w154";
-        public static final String W185 = "w185";
-        public static final String W342 = "w342";
+        public static final String W185 = "w185";   //185x277
+        public static final String W342 = "w342";   //500x750
         public static final String W500 = "w500";
         public static final String W780 = "w780";
         public static final String Original = "original";
     }
 
-    private DataService() {
+    public static class SortOrder {
+//        popularity.asc, popularity.desc, release_date.asc, release_date.desc, revenue.asc, revenue.desc, primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc, vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
+        public static final String Popularity_Ascending = "popularity.asc";
+        public static final String Popularity_Descending = "popularity.desc";
+        public static final String Rating_Descending = "vote_average" + Direction.Descending;
+        public static final String Rating_Ascending = "vote_average.asc";
+        public static final String Release_Date_Ascending = "release_date.asc";
+        public static HashMap<String,String> values() {
 
+            HashMap<String,String> sortOrderValues = new HashMap<String,String>();
+            Field[] fields = SortOrder.class.getDeclaredFields();
+            for (Field f : fields) {
+                if (Modifier.isStatic(f.getModifiers())) {
+                    try {
+                        String fieldName = f.getName();
+                        Object fieldValue = f.get(null);
+                        sortOrderValues.put(f.getName(),fieldValue!=null?fieldValue.toString():"");
+                    }
+                    catch(Exception x) {
+                        String sErr = x.getMessage();
+                    }
+                }
+            }
+            return sortOrderValues;
+        }
+
+        public static class Direction {
+            public static final String Ascending = ".asc";
+            public static final String Descending = ".desc";
+        }
+    }
+
+    public void setSortOrder(String sortOrder) {
+        AppSettings.set(AppSettings.Settings.Sort_Order, sortOrder);
+        m_DefaultSortOrder = sortOrder;
+    }
+
+    private DataService() {
+        String defaultSortOrder = AppSettings.get(AppSettings.Settings.Sort_Order);
+        m_DefaultSortOrder = defaultSortOrder!=""?defaultSortOrder:SortOrder.Release_Date_Ascending;
     }
     public static DataService getInstance() {
         return m_DataService;
@@ -102,10 +144,13 @@ public class DataService {
     }
 
     public UUID fetchMoviesData() {
+        return fetchMoviesData(null);
+    }
+    public UUID fetchMoviesData(String sortOrder) {
         UUID uuid = UUID.randomUUID();
         try {
             String language = "&language=en-US";
-            String sortOrder = "&sort_by=popularity.desc";
+            sortOrder = "&sort_by="+(sortOrder!=null?sortOrder:m_DefaultSortOrder);
             String filter = "&include_adult=false&include_video=false";
             String page = "&page=1";
 

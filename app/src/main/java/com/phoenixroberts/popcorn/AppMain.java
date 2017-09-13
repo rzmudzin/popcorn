@@ -6,26 +6,32 @@ package com.phoenixroberts.popcorn;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.phoenixroberts.popcorn.data.DataService;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 
 
 public class AppMain extends Application {
 
-    private static Context context;
+    private static Context m_Context;
+    private static final String m_AppName = "popcorn";
 
     public void onCreate() {
         super.onCreate();
-        AppMain.context = getApplicationContext();
-        DataServiceBroadcastReceiver.getInstance().Register(AppMain.context);
-
+        AppMain.m_Context = getApplicationContext();
+        DataServiceBroadcastReceiver.getInstance().Register(AppMain.m_Context);
+        //DataService.SortOrder.values();
 
     }
 
     public static Context getAppContext() {
-        return AppMain.context;
+        return AppMain.m_Context;
     }
 
+    public static String getAppName() {
+        return m_AppName;
+    }
 
     public static class BundleExtraType {
         public static final String MovieId = "MovieId";

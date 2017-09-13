@@ -20,6 +20,12 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/refreshMenuOption"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
     <!--
     <item
         android:id="@+id/loadData"

@@ -39,7 +39,7 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
 
     public MovieGridFragment() {
         m_ToolbarFilter = new ArrayList<Integer>(Arrays.asList(new Integer [] {
-                R.id.settingsMenuOption, R.id.sortOrderMenuOption
+                R.id.settingsMenuOption, R.id.sortOrderMenuOption, R.id.refreshMenuOption
         }));
     }
 
@@ -103,6 +103,9 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
             case android.R.id.home: {
                 getActivity().onBackPressed();
             }
+            case R.id.refreshMenuOption:
+                ((MainActivity)getActivity()).LoadData();
+                break;
             case R.id.settingsMenuOption: {
 //                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
 //                        "Simple Test Dialog", "A simple message to display", "Ok", null));
@@ -124,9 +127,13 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                         new ArrayList<Dialogs.ISelectionDialogItemData>(Arrays.asList(new Dialogs.ISelectionDialogItemData [] {
                                 new Dialogs.SelectionDialogItemData("Popular",(eventArgs)->{
                                     Toast.makeText(getActivity(), "\n  Popular  \n", Toast.LENGTH_SHORT).show();
+                                    DataService.getInstance().setSortOrder(DataService.SortOrder.Popularity_Descending);
+                                    DataService.getInstance().fetchMoviesData();
                                 }),
                                 new Dialogs.SelectionDialogItemData("Top Rated",(eventArgs)->{
                                     Toast.makeText(getActivity(), "\n  Top Rated  \n", Toast.LENGTH_SHORT).show();
+                                    DataService.getInstance().setSortOrder(DataService.SortOrder.Rating_Descending);
+                                    DataService.getInstance().fetchMoviesData();
                                 })
                         }))));
                 break;

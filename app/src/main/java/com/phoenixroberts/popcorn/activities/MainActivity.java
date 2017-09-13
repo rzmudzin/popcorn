@@ -52,11 +52,15 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
             }
         });
         if(savedInstanceState==null) {
-            m_StatusDialog = new StatusDialog(new StatusDialog.ShowStatusRequest(this, true, "Loading",
-                    StatusDialog.MaskType.Black, true));
-            m_StatusDialog.showDialog();
-            DataService.getInstance().fetchMoviesData();
+            LoadData();
         }
+    }
+
+    public void LoadData() {
+        m_StatusDialog = new StatusDialog(new StatusDialog.ShowStatusRequest(this, true, "Loading",
+                StatusDialog.MaskType.Black, true));
+        m_StatusDialog.showDialog();
+        DataService.getInstance().fetchMoviesData();
     }
 
     @Override
