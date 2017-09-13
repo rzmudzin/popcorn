@@ -4,8 +4,12 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.phoenixroberts.popcorn.R;
@@ -33,8 +37,9 @@ public class DialogService implements IDialogService {
         dialog.setCancelable(false);
         TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
         alertTitle.setText(dialogData.getTitle());
-
-        //alertTitle.setTypeface(new Typeface(Typeface.BOLD));
+        alertTitle.setTypeface(null,Typeface.BOLD);
+        TextView alertMessage = (TextView)dialog.findViewById(R.id.message);
+        alertMessage.setText(dialogData.getText());
 
         Button ok = (Button)dialog.findViewById(R.id.okButton);
         ok.setText(dialogData.getOkText());
@@ -46,5 +51,62 @@ public class DialogService implements IDialogService {
             }
         });
         dialog.show();
+    }
+    public void DisplayTextInputDialog(Dialogs.ITextInputDialogData dialogData) {
+
+        Dialog dialog = new Dialog(dialogData.getContext());
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.text_input_dialog_data);
+        dialog.setCancelable(false);
+        dialog.setCancelable(false);
+        TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
+        alertTitle.setText(dialogData.getTitle());
+        TextView alertMessage = (TextView)dialog.findViewById(R.id.message);
+        alertMessage.setText(dialogData.getText());
+        EditText editText = (EditText)dialog.findViewById(R.id.inputValue);
+        Button ok = (Button)dialog.findViewById(R.id.okButton);
+        ok.setText(dialogData.getOkText());
+        ok.setOnClickListener((v) -> {
+            dialog.dismiss();
+            Consumer<Dialogs.IDialogEventData> okAction = dialogData.getOkAction();
+            if(okAction!=null) {
+                String inputValue = editText.getText().toString();
+                okAction.accept(new Dialogs.TextInputDialogData.TextChangedEventArgs(inputValue));
+            }
+        });
+
+        Button cancel = (Button)dialog.findViewById(R.id.cancelButton);
+        cancel.setText(dialogData.getCancelText());
+        cancel.setOnClickListener((v) -> {
+            dialog.dismiss();
+            Consumer<Dialogs.IDialogEventData> cancelAction = dialogData.getCancelAction();
+            if(cancelAction!=null) {
+                cancelAction.accept(null);
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String inputValue = editText.getText().toString();
+                ok.setEnabled(inputValue.length()>3?true:false);
+                Consumer<Dialogs.IDialogEventData> onTextChangedAction = dialogData.getTextChangedAction();
+                if(onTextChangedAction!=null) {
+                    onTextChangedAction.accept(new Dialogs.TextInputDialogData.TextChangedEventArgs(inputValue));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        dialog.show();
+
     }
 }

@@ -6,7 +6,7 @@
     <color name="text_white">#FFFFFF</color>
     <color name="background_gray">#acaca9</color>
     <color name="medium_gray">#8F8F8F</color>
-    <color name="servpro_orange">#F37736</color>
+    <color name="orange">#F37736</color>
     <color name="disable_button">#fff39e72</color>
     <color name="delete_red">#FF0000</color>
 
@@ -20,8 +20,8 @@
     <color name="error_cell_background">#F7d9d9</color>
     <color name="error_cell_background_pressed">#f3c4c4</color>
     <color name="warning_cell_text_color">#C8C800</color>
-    <color name="residential_badge_color">#ff639ef6</color>
-    <color name="commercial_badge_color">#ffa379de</color>
+    <color name="blue">#ff639ef6</color>
+    <color name="purple">#ffa379de</color>
     <color name="hamburger_color">#FFFFFF</color>
     <color name="menu_header_text">#777777</color>
     <color name="menu_header_background">#CECECE</color>

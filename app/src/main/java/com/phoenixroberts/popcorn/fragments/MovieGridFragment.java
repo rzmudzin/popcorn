@@ -1,5 +1,6 @@
 package com.phoenixroberts.popcorn.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -103,9 +104,15 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 getActivity().onBackPressed();
             }
             case R.id.settingsMenuOption: {
-//                Toast.makeText(getActivity(), "Settings", Toast.LENGTH_SHORT).show();
-                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
-                        "Simple Test Dialog", "A Message", "Ok", null));
+//                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+//                        "Simple Test Dialog", "A simple message to display", "Ok", null));
+
+//                public TextInputDialogData(Context context, String title, String okText, String cancelText, String text,
+//                      Consumer< Dialogs.IDialogEventData > okEventHandler,
+//                      Consumer< Dialogs.IDialogEventData > cancelEventHandler,
+//                      Consumer< Dialogs.IDialogEventData > textChangedEventHandler) {
+                DialogService.getInstance().DisplayTextInputDialog(new Dialogs.TextInputDialogData(getActivity(),"Test Text Input Dialog",
+                        "Ok", "Cancel", "Dialog for testing text input", null, null, null));
                 break;
             }
             case R.id.sortOrderMenuOption: {

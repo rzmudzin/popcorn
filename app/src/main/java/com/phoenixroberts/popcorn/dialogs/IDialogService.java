@@ -8,5 +8,5 @@ public interface IDialogService {
     void DisplayNotificationDialog(Dialogs.IDialogData dialogData);
 //    void DisplayConfirmationDialog(IConfirmationDialogData dialogData);
 //    void DisplayChoiceSelectionDialog(ISelectionDialogData dialogData);
-//    void DisplayTextInputDialog(ITextInputDialogData data);
+    void DisplayTextInputDialog(Dialogs.ITextInputDialogData data);
 }
