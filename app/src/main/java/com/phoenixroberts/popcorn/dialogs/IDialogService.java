@@ -7,6 +7,6 @@ package com.phoenixroberts.popcorn.dialogs;
 public interface IDialogService {
     void DisplayNotificationDialog(Dialogs.IDialogData dialogData);
 //    void DisplayConfirmationDialog(IConfirmationDialogData dialogData);
-//    void DisplayChoiceSelectionDialog(ISelectionDialogData dialogData);
+    void DisplayChoiceSelectionDialog(Dialogs.ISelectionDialogData dialogData);
     void DisplayTextInputDialog(Dialogs.ITextInputDialogData data);
 }

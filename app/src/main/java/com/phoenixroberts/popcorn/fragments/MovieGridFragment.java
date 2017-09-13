@@ -107,16 +107,28 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
 //                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
 //                        "Simple Test Dialog", "A simple message to display", "Ok", null));
 
-//                public TextInputDialogData(Context context, String title, String okText, String cancelText, String text,
-//                      Consumer< Dialogs.IDialogEventData > okEventHandler,
-//                      Consumer< Dialogs.IDialogEventData > cancelEventHandler,
-//                      Consumer< Dialogs.IDialogEventData > textChangedEventHandler) {
                 DialogService.getInstance().DisplayTextInputDialog(new Dialogs.TextInputDialogData(getActivity(),"Test Text Input Dialog",
-                        "Ok", "Cancel", "Dialog for testing text input", null, null, null));
+                        "Ok", "Cancel", "Dialog for testing text input",
+                        (eventArgs) -> {
+                            //On ok event handler
+                            Dialogs.IDialogTextChangedEventData textInputEventArgs = (Dialogs.IDialogTextChangedEventData)eventArgs;
+                            Toast.makeText(getActivity(),textInputEventArgs.getText(), Toast.LENGTH_SHORT).show();
+                        },
+                        null,       //On cancel
+                        null));     //On text changed
                 break;
             }
             case R.id.sortOrderMenuOption: {
-                Toast.makeText(getActivity(), "Sort Order", Toast.LENGTH_SHORT).show();
+                DialogService.getInstance().DisplayChoiceSelectionDialog(new Dialogs.SelectionDialogData(getActivity(),
+                        "Select Sort Order",
+                        new ArrayList<Dialogs.ISelectionDialogItemData>(Arrays.asList(new Dialogs.ISelectionDialogItemData [] {
+                                new Dialogs.SelectionDialogItemData("Popular",(eventArgs)->{
+                                    Toast.makeText(getActivity(), "\n  Popular  \n", Toast.LENGTH_SHORT).show();
+                                }),
+                                new Dialogs.SelectionDialogItemData("Top Rated",(eventArgs)->{
+                                    Toast.makeText(getActivity(), "\n  Top Rated  \n", Toast.LENGTH_SHORT).show();
+                                })
+                        }))));
                 break;
             }
             default:

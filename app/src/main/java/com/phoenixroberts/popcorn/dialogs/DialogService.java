@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.phoenixroberts.popcorn.R;
@@ -59,9 +60,9 @@ public class DialogService implements IDialogService {
         dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.text_input_dialog_data);
         dialog.setCancelable(false);
-        dialog.setCancelable(false);
         TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
         alertTitle.setText(dialogData.getTitle());
+        alertTitle.setTypeface(null,Typeface.BOLD);
         TextView alertMessage = (TextView)dialog.findViewById(R.id.message);
         alertMessage.setText(dialogData.getText());
         EditText editText = (EditText)dialog.findViewById(R.id.inputValue);
@@ -94,7 +95,7 @@ public class DialogService implements IDialogService {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String inputValue = editText.getText().toString();
-                ok.setEnabled(inputValue.length()>3?true:false);
+//                ok.setEnabled(inputValue.length()>3?true:false);
                 Consumer<Dialogs.IDialogEventData> onTextChangedAction = dialogData.getTextChangedAction();
                 if(onTextChangedAction!=null) {
                     onTextChangedAction.accept(new Dialogs.TextInputDialogData.TextChangedEventArgs(inputValue));
@@ -107,6 +108,24 @@ public class DialogService implements IDialogService {
             }
         });
         dialog.show();
+    }
+    public void DisplayChoiceSelectionDialog(Dialogs.ISelectionDialogData dialogData) {
+        Dialog dialog = new Dialog(dialogData.getContext());
 
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.choice_selection_dialog);
+        dialog.setCancelable(false);
+        TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
+        alertTitle.setText(dialogData.getTitle());
+        alertTitle.setTypeface(null,Typeface.BOLD);
+        ListView selectionsList = (ListView)dialog.findViewById(R.id.itemsList);
+        selectionsList.setAdapter(new Dialogs.DroidSelectionDialogAdapter(dialog,dialogData.getContext(),dialogData.getChoices()));
+        Button cancel = (Button)dialog.findViewById(R.id.cancelButton);
+        cancel.setText("Cancel");
+        cancel.setOnClickListener((v) -> {
+            dialog.dismiss();
+        });
+        dialog.show();
     }
 }
