@@ -59,7 +59,7 @@ public class DataService {
 //      primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc,
 //      vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
         public static final String Popular = "popularity" + Direction.Descending;
-        public static final String Best_Reviews = "vote_average" + Direction.Descending;
+        public static final String Highest_Rated = "vote_average" + Direction.Descending;
         public static final String Recent_Releases = "release_date" + Direction.Descending;
 
         public static final String Popularity_Ascending = "popularity" + Direction.Ascending;
@@ -138,7 +138,8 @@ public class DataService {
     }
     public String getPosterPath(Integer movieId, String posterSize) {
         DTO.MoviesListItem movie = getMovieData(movieId);
-        String sUrlPath = m_MediaServiceBasePath + posterSize + movie.getPosterPath();
+        String posterPath = movie.getPosterPath();
+        String sUrlPath = m_MediaServiceBasePath + posterSize + posterPath;
         return sUrlPath;
     }
 

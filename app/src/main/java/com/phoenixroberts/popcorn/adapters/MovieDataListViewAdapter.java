@@ -5,6 +5,7 @@ package com.phoenixroberts.popcorn.adapters;
  */
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.phoenixroberts.popcorn.AppMain;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
@@ -83,16 +83,25 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
             ImageView movieImage = (ImageView)v.findViewById(R.id.movie_image);
             movieImage.setOnClickListener(this);
             v.setTag(new MovieDataItemViewHolder(
-                    null,
+                    (TextView)v.findViewById(R.id.movie_title),
                     (TextView)v.findViewById(R.id.movieDataItemId),
                     movieImage
             ));
         }
         MovieDataItemViewHolder movieDataViewHolder = (MovieDataItemViewHolder)v.getTag();
+        movieDataViewHolder.getMovieTitle().setText(m_MoviesData.get(position).getTitle());
         movieDataViewHolder.getMovieImage().setTag(m_MoviesData.get(position).getId().toString());
-        //String sUrlPath = "http://image.tmdb.org/t/p/" + DataService.PosterSize.W500 + m_MoviesData.get(position).getPosterPath();
         String sUrlPath = DataService.getInstance().getMovieGridPosterPath(m_MoviesData.get(position).getId());
         loadImage(movieDataViewHolder.getMovieImage(), sUrlPath);
+        //Below need a better way of handling this... Picasso seems to get the images out of order if we skip invalid urls though
+        //Same result as well when implementing a listener and overriding the image load error method
+        if(sUrlPath.endsWith("null")) {
+            Log.d(getClass().toString(),"Null Image Poster Path");
+            movieDataViewHolder.getMovieTitle().setVisibility(View.VISIBLE);
+        }
+        else {
+            movieDataViewHolder.getMovieTitle().setVisibility(View.GONE);
+        }
         return v;
     }
 
@@ -102,7 +111,6 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
             Uri uri = Uri.parse(sUrlPath);
             Picasso.with(m_Context)
                     .load(uri).placeholder(R.drawable.popcorn).into(imageView);
-//                    .resize(width,height).into(imageView);
         }
         catch(IOException x) {
             Log.e(getClass().toString(),x.getMessage());
@@ -119,19 +127,19 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
 
 
     class MovieDataItemViewHolder {
-        private TextView m_MovieInfoTitle;
+        private TextView m_MovieTitle;
         private TextView m_MovieId;
         private ImageView m_MovieImage;
 
-        public MovieDataItemViewHolder(TextView movieInfo, TextView movieId, ImageView movieImage) {
-            m_MovieInfoTitle = movieInfo;
+        public MovieDataItemViewHolder(TextView movieTitle, TextView movieId, ImageView movieImage) {
+            m_MovieTitle = movieTitle;
             m_MovieId = movieId;
             m_MovieImage=movieImage;
         }
         public TextView getMovieId() { return m_MovieId; }
         public void setMovieId(TextView movieId) { m_MovieId = movieId; }
-        public TextView getMovieTitle() { return m_MovieInfoTitle; }
-        public void setMovieTitle(TextView movieTitle) { m_MovieInfoTitle = movieTitle; }
+        public TextView getMovieTitle() { return m_MovieTitle; }
+        public void setMovieTitle(TextView movieTitle) { m_MovieTitle = movieTitle; }
         public ImageView getMovieImage() { return m_MovieImage; }
         public void setMovieImage(ImageView imageView) { m_MovieImage = imageView; }
     }

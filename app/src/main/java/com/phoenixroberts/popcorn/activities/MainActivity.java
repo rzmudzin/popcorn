@@ -22,9 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//1) Add settings screen?
+//2) Lock orientation to portrait
 //3) Prompt user for API Key on first login
-//4) Display movie name (up to "x" characters) on default grid image if no movie poster
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;
