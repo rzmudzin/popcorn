@@ -40,7 +40,7 @@ public class DataService {
     private String m_MediaServiceBasePath = "http://image.tmdb.org/t/p/";
     private String m_DataServiceBasePath = "https://api.themoviedb.org/3/";
     String m_MovieListService = "discover/movie?api_key=";
-    private String m_APIToken = "437c0161cd02c1361b4f6d2446c3e376";
+    private String m_APIKey;
     private List<DTO.MoviesListItem> m_MoviesList = new ArrayList<DTO.MoviesListItem>();
     private String m_DefaultSortOrder;
 
@@ -112,6 +112,7 @@ public class DataService {
     }
 
     private DataService() {
+        m_APIKey = AppSettings.get(AppSettings.Settings.APKI_Key);
         String defaultSortOrder = AppSettings.get(AppSettings.Settings.Sort_Order);
         m_DefaultSortOrder = defaultSortOrder!=""?defaultSortOrder:SortOrder.Popular;
     }
@@ -129,7 +130,12 @@ public class DataService {
         }
         AppMain.getAppContext().sendBroadcast(i);
     }
-
+    public String getAPIKey() {
+        return m_APIKey;
+    }
+    public void setAPIKey(String apiKey) {
+        m_APIKey=apiKey;
+    }
     public String getMovieGridPosterPath(Integer movieId) {
         return getPosterPath(movieId, PosterSize.W185);
     }
@@ -176,7 +182,7 @@ public class DataService {
             String page = "&page=1";
 
             String queryString = language+sortOrder+filter+page;
-            String servicePath = m_MovieListService + m_APIToken + queryString;
+            String servicePath = m_MovieListService + m_APIKey + queryString;
             String payloadData = null; //Json payload to send
             final String taskName = "Fetch Movies";
             DataServiceFetch dataSyncAction = new DataServiceFetch(m_DataServiceBasePath+ servicePath,

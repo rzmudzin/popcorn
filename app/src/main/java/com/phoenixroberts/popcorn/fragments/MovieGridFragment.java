@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.phoenixroberts.popcorn.AppSettings;
 import com.phoenixroberts.popcorn.activities.MainActivity;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.dialogs.DialogService;
@@ -104,18 +106,20 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 getActivity().onBackPressed();
             }
             case R.id.refreshMenuOption:
-                ((MainActivity)getActivity()).LoadData();
+                if(TextUtils.isEmpty(DataService.getInstance().getAPIKey())) {
+                    ((MainActivity)getActivity()).promptUserForAPIKey();
+                }
+                else {
+                    ((MainActivity)getActivity()).LoadData();
+                }
                 break;
             case R.id.settingsMenuOption: {
-                DialogService.getInstance().DisplayTextInputDialog(new Dialogs.TextInputDialogData(getActivity(),"Test Text Input Dialog",
-                        "Ok", "Cancel", "Dialog for testing text input",
-                        (eventArgs) -> {
-                            //On ok event handler
-                            Dialogs.IDialogTextChangedEventData textInputEventArgs = (Dialogs.IDialogTextChangedEventData)eventArgs;
-                            Toast.makeText(getActivity(),textInputEventArgs.getText(), Toast.LENGTH_SHORT).show();
-                        },
-                        null,       //On cancel
-                        null));     //On text changed
+                if(TextUtils.isEmpty(DataService.getInstance().getAPIKey())) {
+                    ((MainActivity)getActivity()).promptUserForAPIKey();
+                }
+                else {
+                    ((MainActivity) getActivity()).promptUserForAPIKey();
+                }
                 break;
             }
             case R.id.sortOrderMenuOption: {
@@ -123,7 +127,6 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 for (DataService.SortOrder.SortOrderType sortOrderType : DataService.SortOrder.values()) {
                     options.add(new Dialogs.SelectionDialogItemData(sortOrderType.getName(),(eventArgs)->{
                         DataService.getInstance().setSortOrder(sortOrderType.getValue());
-                        //DataService.getInstance().fetchMoviesData();
                         ((MainActivity)getActivity()).LoadData();
                     }));
                 }

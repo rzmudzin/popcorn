@@ -9,10 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.phoenixroberts.popcorn.AppSettings;
 import com.phoenixroberts.popcorn.R;
 import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
+import com.phoenixroberts.popcorn.dialogs.DialogService;
+import com.phoenixroberts.popcorn.dialogs.Dialogs;
 import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
@@ -22,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//1) Prompt user for API Key on first login
 //2) Move list to top after executing a new fetch
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
@@ -50,8 +52,32 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
             }
         });
         if(savedInstanceState==null) {
-            LoadData();
+            String apiKey = DataService.getInstance().getAPIKey();
+            if(apiKey==null | apiKey=="") {
+                promptUserForAPIKey();
+            }
+            else {
+                LoadData();
+            }
         }
+    }
+
+    public void promptUserForAPIKey() {
+        DialogService.getInstance().DisplayTextInputDialog(new Dialogs.TextInputDialogData(this,
+                "API Key Entry",
+                "Ok",
+                "Cancel",
+                "Please enter your Movie DB API Key\n(Version 3 format).",
+                (eventArgs) -> {
+                    //On ok event handler
+                    Dialogs.IDialogTextChangedEventData textInputEventArgs = (Dialogs.IDialogTextChangedEventData)eventArgs;
+                    //                            Toast.makeText(getActivity(),textInputEventArgs.getText(), Toast.LENGTH_SHORT).show();
+                    AppSettings.set(AppSettings.Settings.APKI_Key, textInputEventArgs.getText());
+                    DataService.getInstance().setAPIKey(textInputEventArgs.getText());
+                    LoadData();
+                },
+                null,       //On cancel
+                null));     //On text changed
     }
 
     public void LoadData() {
