@@ -4,6 +4,7 @@ package com.phoenixroberts.popcorn.data;
  * Created by robz on 9/6/17.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -121,14 +122,17 @@ public class DataService {
     }
 
     private void broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, HashMap<String,String> extras) {
-        Intent i = new Intent(DataServiceBroadcastReceiver.IntentFilter);
-        i.putExtra(dataServicesEventType.getClass().getName(),dataServicesEventType.toString());
-        if(extras!=null) {
-            for (String key : extras.keySet()) {
-                i.putExtra(key, extras.get(key));
+        Context context = AppMain.getAppContext();
+        if(context!=null) {
+            Intent i = new Intent(DataServiceBroadcastReceiver.IntentFilter);
+            i.putExtra(dataServicesEventType.getClass().getName(), dataServicesEventType.toString());
+            if (extras != null) {
+                for (String key : extras.keySet()) {
+                    i.putExtra(key, extras.get(key));
+                }
             }
+            context.sendBroadcast(i);
         }
-        AppMain.getAppContext().sendBroadcast(i);
     }
     public String getAPIKey() {
         return m_APIKey;
@@ -145,8 +149,7 @@ public class DataService {
     public String getPosterPath(Integer movieId, String posterSize) {
         DTO.MoviesListItem movie = getMovieData(movieId);
         String posterPath = movie.getPosterPath();
-        String sUrlPath = m_MediaServiceBasePath + posterSize + posterPath;
-        return sUrlPath;
+        return m_MediaServiceBasePath + posterSize + posterPath;
     }
 
     public List<DTO.MoviesListItem> getMoviesData() {

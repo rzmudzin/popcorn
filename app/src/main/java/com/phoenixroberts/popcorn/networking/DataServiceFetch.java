@@ -95,8 +95,7 @@ public class DataServiceFetch implements DataSync.IDataSyncAction
             }
         }
         Request request = requestBuilder.build();
-        Response response = client.newCall(request).execute();
-        return response;
+        return client.newCall(request).execute();
     }
 
     private Response executePost(String url) throws IOException {
@@ -114,7 +113,6 @@ public class DataServiceFetch implements DataSync.IDataSyncAction
             }
         }
         Request request = requestBuilder.build();
-        Response response = client.newCall(request).execute();
-        return response;
+        return client.newCall(request).execute();
     }
 }

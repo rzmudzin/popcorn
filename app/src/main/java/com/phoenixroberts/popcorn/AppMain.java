@@ -14,19 +14,17 @@ import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 
 public class AppMain extends Application {
 
-    private static Context m_Context;
+    private static AppMain m_Instance;
     private static final String m_AppName = "popcorn";
 
     public void onCreate() {
         super.onCreate();
-        AppMain.m_Context = getApplicationContext();
-        DataServiceBroadcastReceiver.getInstance().Register(AppMain.m_Context);
-        //DataService.SortOrder.values();
-
+        m_Instance = this;
+        DataServiceBroadcastReceiver.getInstance().Register(getApplicationContext());
     }
 
     public static Context getAppContext() {
-        return AppMain.m_Context;
+        return m_Instance!=null?m_Instance.getApplicationContext():null;
     }
 
     public static String getAppName() {

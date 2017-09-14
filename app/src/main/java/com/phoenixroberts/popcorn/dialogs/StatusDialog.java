@@ -48,8 +48,7 @@ public class StatusDialog {
     private int dpToPx(Context context, int dp)
     {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int px = (int)Math.round((double)dp * ((double)displayMetrics.xdpi / (double) DisplayMetrics.DENSITY_DEFAULT));
-        return px;
+        return (int)Math.round((double)dp * ((double)displayMetrics.xdpi / (double) DisplayMetrics.DENSITY_DEFAULT));
     }
     private void actionDismiss()
     {
