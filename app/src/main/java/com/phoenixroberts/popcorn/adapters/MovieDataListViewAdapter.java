@@ -55,12 +55,12 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if(m_ItemLayoutId==R.layout.fragment_movie_data_list) {
-            return populateMovieView(position, convertView, parent);
+            return populateMovieListView(position, convertView, parent);
         }
         return populateMovieGrid(position, convertView, parent);
     }
 
-    View populateMovieView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    View populateMovieListView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if(v==null) {
             v = LayoutInflater.from(m_Context).inflate(R.layout.fragment_movie_data_item, parent, false);

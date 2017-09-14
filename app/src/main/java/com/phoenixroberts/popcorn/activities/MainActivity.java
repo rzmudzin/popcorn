@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//2) Move list to top after executing a new fetch
-
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;
     StatusDialog m_StatusDialog;

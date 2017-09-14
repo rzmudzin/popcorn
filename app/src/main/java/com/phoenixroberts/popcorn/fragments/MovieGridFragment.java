@@ -1,11 +1,11 @@
 package com.phoenixroberts.popcorn.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,9 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.phoenixroberts.popcorn.AppSettings;
 import com.phoenixroberts.popcorn.activities.MainActivity;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.dialogs.DialogService;
@@ -37,7 +35,8 @@ import java.util.List;
 public class MovieGridFragment extends Fragment implements IDataServiceListener {
 
     private List<Integer> m_ToolbarFilter = new ArrayList<Integer>();
-    private MovieDataListViewAdapter m_ListViewAdapter;
+    private MovieDataListViewAdapter m_Adapter;
+    private GridView m_GridView;
 
     public MovieGridFragment() {
         m_ToolbarFilter = new ArrayList<Integer>(Arrays.asList(new Integer [] {
@@ -52,12 +51,13 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
         View v = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
         List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
-        m_ListViewAdapter = new MovieDataListViewAdapter(this.getActivity(),
-                moviesData!=null?moviesData:new ArrayList<DTO.MoviesListItem>(), R.layout.movie_grid_item);
+        m_Adapter = new MovieDataListViewAdapter(this.getActivity(),
+                moviesData!=null?moviesData:new ArrayList<DTO.MoviesListItem>(),
+                R.layout.movie_grid_item);  //R.layout.fragment_movie_data_list
 
         // Get a reference to the ListView, and attach this adapter to it.
-        GridView gridView = (GridView) v.findViewById(R.id.movies_grid);
-        gridView.setAdapter(m_ListViewAdapter);
+        m_GridView = (GridView) v.findViewById(R.id.movies_grid);
+        m_GridView.setAdapter(m_Adapter);
         return v;
     }
 
@@ -114,24 +114,24 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 }
                 break;
             case R.id.settingsMenuOption: {
+                ((MainActivity) getActivity()).promptUserForAPIKey();
+                break;
+            }
+            case R.id.sortOrderMenuOption: {
                 if(TextUtils.isEmpty(DataService.getInstance().getAPIKey())) {
                     ((MainActivity)getActivity()).promptUserForAPIKey();
                 }
                 else {
-                    ((MainActivity) getActivity()).promptUserForAPIKey();
+                    List<Dialogs.ISelectionDialogItemData> options = new ArrayList<Dialogs.ISelectionDialogItemData>();
+                    for (DataService.SortOrder.SortOrderType sortOrderType : DataService.SortOrder.values()) {
+                        options.add(new Dialogs.SelectionDialogItemData(sortOrderType.getName(), (eventArgs) -> {
+                            DataService.getInstance().setSortOrder(sortOrderType.getValue());
+                            ((MainActivity) getActivity()).LoadData();
+                        }));
+                    }
+                    DialogService.getInstance().DisplayChoiceSelectionDialog(new Dialogs.SelectionDialogData(getActivity(),
+                            "Select Category", options));
                 }
-                break;
-            }
-            case R.id.sortOrderMenuOption: {
-                List<Dialogs.ISelectionDialogItemData> options = new ArrayList<Dialogs.ISelectionDialogItemData>();
-                for (DataService.SortOrder.SortOrderType sortOrderType : DataService.SortOrder.values()) {
-                    options.add(new Dialogs.SelectionDialogItemData(sortOrderType.getName(),(eventArgs)->{
-                        DataService.getInstance().setSortOrder(sortOrderType.getValue());
-                        ((MainActivity)getActivity()).LoadData();
-                    }));
-                }
-                DialogService.getInstance().DisplayChoiceSelectionDialog(new Dialogs.SelectionDialogData(getActivity(),
-                        "Select Category", options));
                 break;
             }
             default:
@@ -141,34 +141,40 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
     }
 
     public void onDataServiceResult(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, Intent i) {
-        switch (dataServicesEventType) {
-            case ItemFetchSuccess: {
-                if(i!=null && i.hasExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString())) {
-                    Integer movieId = Integer.parseInt(i.getStringExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString()));
-                    displayDetailFragment(movieId);
+        try {
+            switch (dataServicesEventType) {
+                case ItemFetchSuccess: {
+                    if (i != null && i.hasExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString())) {
+                        Integer movieId = Integer.parseInt(i.getStringExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString()));
+                        displayDetailFragment(movieId);
+                    }
+                    break;
                 }
-                break;
+                case ItemFetchFail:
+                    DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+                            "Movie data download failed",
+                            "Currently unable to download movie info.\nAre you connected to the internet?",
+                            "Ok", null));
+                    break;
+                case ListFetchFail:
+                    DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+                            "Movie list download failed",
+                            "Currently unable to download movies list.\nAre you connected to the internet?",
+                            "Ok", null));
+                    break;
+                case ListFetchSuccess:
+                    List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
+                    m_Adapter.getMoviesData().clear();
+                    m_Adapter.getMoviesData().addAll(moviesData);
+                    m_Adapter.notifyDataSetChanged();
+                    m_GridView.smoothScrollToPosition(0);
+                    break;
+                default:
+                    break;
             }
-            case ItemFetchFail:
-                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
-                        "Movie data download failed",
-                        "Currently unable to download movie info.\nAre you connected to the internet?",
-                        "Ok", null));
-                break;
-            case ListFetchFail:
-                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
-                        "Movie list download failed",
-                        "Currently unable to download movies list.\nAre you connected to the internet?",
-                        "Ok", null));
-                break;
-            case ListFetchSuccess:
-                List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
-                m_ListViewAdapter.getMoviesData().clear();
-                m_ListViewAdapter.getMoviesData().addAll(moviesData);
-                m_ListViewAdapter.notifyDataSetChanged();
-                break;
-            default:
-                break;
+        }
+        catch(Exception x){
+            Log.e(getClass().toString(),x.getMessage());
         }
     }
 }
