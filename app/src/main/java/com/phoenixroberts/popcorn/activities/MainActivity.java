@@ -22,10 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//1) Settings and preferences
-//2) Sorting
-//3) Scroll view on detail screen
-//4) Popup dialogs
+//1) Add settings screen?
+//2) Scroll view on detail screen
+//3) Prompt user for API Key on first login
+//4) Display movie name (up to "x" characters) on grid if no movie poster
+//5) Better movie title display in detail
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;
