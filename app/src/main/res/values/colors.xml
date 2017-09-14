@@ -13,8 +13,9 @@
     <color name="alert_red">#b40000</color>
     <color name="light_red">#F7d9d9</color>
 
-    <color name="app_primary_color">#4EA135</color>
-    <color name="app_accent_color">#4EA135</color>
+    <color name="app_primary_color">#FF0000</color>
+    <color name="app_accent_color">#FF0000</color>
+    <color name="app_secondary_color">#0D131A</color>
     <color name="warning_cell_background">#FFFFEB</color>
     <color name="success_cell_background">#EBFFEB</color>
     <color name="error_cell_background">#F7d9d9</color>

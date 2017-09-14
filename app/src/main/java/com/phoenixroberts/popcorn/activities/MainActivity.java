@@ -23,10 +23,8 @@ import java.util.List;
 
 
 //1) Add settings screen?
-//2) Scroll view on detail screen
 //3) Prompt user for API Key on first login
-//4) Display movie name (up to "x" characters) on grid if no movie poster
-//5) Better movie title display in detail
+//4) Display movie name (up to "x" characters) on default grid image if no movie poster
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;

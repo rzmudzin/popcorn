@@ -10,7 +10,7 @@
 
 
     <style name="AppTheme" parent="AppTheme.Base">
-        <item name="android:statusBarColor">#4EA135</item>
+        <item name="android:statusBarColor">#FF0000</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:fitsSystemWindows">true</item>"
         <item name="android:windowContentTransitions">true</item>
