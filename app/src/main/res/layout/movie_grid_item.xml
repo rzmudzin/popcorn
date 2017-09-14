@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/movie_image"
+            android:contentDescription="@string/movie_poster_description"
             android:src="@drawable/popcorn"
             android:scaleType="centerCrop"
             android:layout_width="0dp"
