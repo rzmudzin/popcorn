@@ -56,28 +56,46 @@ public class DataService {
 
     public static class SortOrder {
 //        popularity.asc, popularity.desc, release_date.asc, release_date.desc, revenue.asc, revenue.desc, primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc, vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
-        public static final String Popularity_Ascending = "popularity.asc";
-        public static final String Popularity_Descending = "popularity.desc";
-        public static final String Rating_Descending = "vote_average" + Direction.Descending;
-        public static final String Rating_Ascending = "vote_average.asc";
-        public static final String Release_Date_Ascending = "release_date.asc";
-        public static HashMap<String,String> values() {
+        public static final String Popular = "popularity" + Direction.Descending;
+        public static final String Best_Reviews = "vote_average" + Direction.Descending;
+        public static final String Recent_Releases = "release_date" + Direction.Descending;
 
-            HashMap<String,String> sortOrderValues = new HashMap<String,String>();
+        public static final String Popularity_Ascending = "popularity" + Direction.Ascending;
+        public static final String Rating_Ascending = "vote_average" + Direction.Ascending;
+        public static final String Release_Date_Ascending = "release_date" + Direction.Ascending;
+        public static class SortOrderType {
+            String m_Name;
+            String m_Value;
+            public SortOrderType(String name, String value) {
+                m_Name=name;
+                m_Value=value;
+            }
+            public String getName() { return m_Name; }
+            public String getValue() { return m_Value; }
+        }
+        public static boolean isValid(String sortOrder) {
+            return values().stream()
+                    .filter(v -> {
+                        return v.getValue().equals(sortOrder);
+                    })
+                    .findFirst().orElse(null)!=null;
+        }
+        public static List<SortOrderType> values() {
+
+            List<SortOrderType> sortOrderTypes = new ArrayList<SortOrderType>();
             Field[] fields = SortOrder.class.getDeclaredFields();
             for (Field f : fields) {
                 if (Modifier.isStatic(f.getModifiers())) {
                     try {
-                        String fieldName = f.getName();
                         Object fieldValue = f.get(null);
-                        sortOrderValues.put(f.getName(),fieldValue!=null?fieldValue.toString():"");
+                        sortOrderTypes.add(new SortOrderType(f.getName().replace('_', ' '),fieldValue!=null?fieldValue.toString():""));
                     }
                     catch(Exception x) {
-                        String sErr = x.getMessage();
+                        Log.e("SortOrder", x.getMessage());
                     }
                 }
             }
-            return sortOrderValues;
+            return sortOrderTypes;
         }
 
         public static class Direction {
@@ -93,7 +111,7 @@ public class DataService {
 
     private DataService() {
         String defaultSortOrder = AppSettings.get(AppSettings.Settings.Sort_Order);
-        m_DefaultSortOrder = defaultSortOrder!=""?defaultSortOrder:SortOrder.Release_Date_Ascending;
+        m_DefaultSortOrder = defaultSortOrder!=""?defaultSortOrder:SortOrder.Popular;
     }
     public static DataService getInstance() {
         return m_DataService;

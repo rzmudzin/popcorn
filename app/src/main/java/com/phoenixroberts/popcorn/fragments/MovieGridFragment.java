@@ -107,9 +107,6 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 ((MainActivity)getActivity()).LoadData();
                 break;
             case R.id.settingsMenuOption: {
-//                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
-//                        "Simple Test Dialog", "A simple message to display", "Ok", null));
-
                 DialogService.getInstance().DisplayTextInputDialog(new Dialogs.TextInputDialogData(getActivity(),"Test Text Input Dialog",
                         "Ok", "Cancel", "Dialog for testing text input",
                         (eventArgs) -> {
@@ -122,20 +119,16 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 break;
             }
             case R.id.sortOrderMenuOption: {
+                List<Dialogs.ISelectionDialogItemData> options = new ArrayList<Dialogs.ISelectionDialogItemData>();
+                for (DataService.SortOrder.SortOrderType sortOrderType : DataService.SortOrder.values()) {
+                    options.add(new Dialogs.SelectionDialogItemData(sortOrderType.getName(),(eventArgs)->{
+                        DataService.getInstance().setSortOrder(sortOrderType.getValue());
+                        //DataService.getInstance().fetchMoviesData();
+                        ((MainActivity)getActivity()).LoadData();
+                    }));
+                }
                 DialogService.getInstance().DisplayChoiceSelectionDialog(new Dialogs.SelectionDialogData(getActivity(),
-                        "Select Sort Order",
-                        new ArrayList<Dialogs.ISelectionDialogItemData>(Arrays.asList(new Dialogs.ISelectionDialogItemData [] {
-                                new Dialogs.SelectionDialogItemData("Popular",(eventArgs)->{
-                                    Toast.makeText(getActivity(), "\n  Popular  \n", Toast.LENGTH_SHORT).show();
-                                    DataService.getInstance().setSortOrder(DataService.SortOrder.Popularity_Descending);
-                                    DataService.getInstance().fetchMoviesData();
-                                }),
-                                new Dialogs.SelectionDialogItemData("Top Rated",(eventArgs)->{
-                                    Toast.makeText(getActivity(), "\n  Top Rated  \n", Toast.LENGTH_SHORT).show();
-                                    DataService.getInstance().setSortOrder(DataService.SortOrder.Rating_Descending);
-                                    DataService.getInstance().fetchMoviesData();
-                                })
-                        }))));
+                        "Select Category", options));
                 break;
             }
             default:
@@ -149,13 +142,21 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
             case ItemFetchSuccess: {
                 if(i!=null && i.hasExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString())) {
                     Integer movieId = Integer.parseInt(i.getStringExtra(DataServiceBroadcastReceiver.DataServicesEventExtra.MovieId.toString()));
-//                    MovieData movieData = DataService.getInstance().getMovieData(movieId);
                     displayDetailFragment(movieId);
                 }
                 break;
             }
             case ItemFetchFail:
-                Toast.makeText(getActivity(),"Unable to retreive requested movie data", Toast.LENGTH_SHORT).show();
+                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+                        "Movie data download failed",
+                        "Currently unable to download movie info.\nAre you connected to the internet?",
+                        "Ok", null));
+                break;
+            case ListFetchFail:
+                DialogService.getInstance().DisplayNotificationDialog(new Dialogs.DialogData(getActivity(),
+                        "Movie list download failed",
+                        "Currently unable to download movies list.\nAre you connected to the internet?",
+                        "Ok", null));
                 break;
             case ListFetchSuccess:
                 List<DTO.MoviesListItem> moviesData = DataService.getInstance().getMoviesData();
