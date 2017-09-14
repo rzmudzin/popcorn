@@ -18,12 +18,12 @@ import okhttp3.Response;
 
 public class DataServiceFetch implements DataSync.IDataSyncAction
 {
-    String m_UrlString = null;
-    String m_PayloadData = null;
-    boolean m_IsPostRequest = false;
-    HashMap<String,String> m_Headers;
-    IFetchResponseHandler m_FetchResponseHandler;
-    OkHttpClient client = new OkHttpClient.Builder()
+    private String m_UrlString = null;
+    private String m_PayloadData = null;
+    private boolean m_IsPostRequest = false;
+    private HashMap<String,String> m_Headers;
+    private IFetchResponseHandler m_FetchResponseHandler;
+    private OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

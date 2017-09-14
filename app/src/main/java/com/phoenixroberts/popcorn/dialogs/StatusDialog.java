@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,10 @@ public class StatusDialog {
 
 
         if (maskType != StatusDialog.MaskType.Black) {
-            m_Dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            Window dialogWindow = m_Dialog.getWindow();
+            if(dialogWindow!=null) {
+                dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            }
         }
 
         if (maskType == StatusDialog.MaskType.None) {

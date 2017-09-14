@@ -24,7 +24,7 @@ public class Dialogs {
     public interface IDialogTextChangedEventData extends IDialogEventData {
         String getText();
     }
-    public static interface IDialogData {
+    public interface IDialogData {
         String getTitle();
         String getText();
         String getOkText();

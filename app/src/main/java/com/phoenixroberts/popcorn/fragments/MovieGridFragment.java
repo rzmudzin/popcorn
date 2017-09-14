@@ -61,7 +61,7 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
         return v;
     }
 
-    void displayDetailFragment(Integer movieId) {
+    private void displayDetailFragment(Integer movieId) {
         MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
         movieDetailFragment.setMovieId(movieId);
         this.getActivity().getSupportFragmentManager()

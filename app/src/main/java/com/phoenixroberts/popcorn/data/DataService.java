@@ -120,7 +120,7 @@ public class DataService {
         return m_DataService;
     }
 
-    void broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, HashMap<String,String> extras) {
+    private void broadcastDataServiceEvent(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, HashMap<String,String> extras) {
         Intent i = new Intent(DataServiceBroadcastReceiver.IntentFilter);
         i.putExtra(dataServicesEventType.getClass().getName(),dataServicesEventType.toString());
         if(extras!=null) {
@@ -183,10 +183,11 @@ public class DataService {
 
             String queryString = language+sortOrder+filter+page;
             String servicePath = m_MovieListService + m_APIKey + queryString;
-            String payloadData = null; //Json payload to send
             final String taskName = "Fetch Movies";
             DataServiceFetch dataSyncAction = new DataServiceFetch(m_DataServiceBasePath+ servicePath,
-                    null, payloadData, false);
+                    null,       //Headers
+                    null,       //Json payload data
+                    false);
             DataSync.DataSyncTask dataSyncTask = new DataSync.DataSyncTask(taskName,dataSyncAction);
             dataSyncAction.setResponseHandler(new IFetchResponseHandler() {
                 @Override
@@ -239,7 +240,7 @@ public class DataService {
 //        }
 //        return uuid;
     }
-    void processMoviesListFetchResponse(IRESTResponse restResponse) {
+    private void processMoviesListFetchResponse(IRESTResponse restResponse) {
         boolean bProcessingCompleted = false;
         try {
             ObjectMapper mapper = new ObjectMapper();

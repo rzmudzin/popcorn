@@ -2,9 +2,11 @@ package com.phoenixroberts.popcorn.activities;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,8 +28,8 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
-    Menu m_Menu;
-    StatusDialog m_StatusDialog;
+    private Menu m_Menu;
+    private StatusDialog m_StatusDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +44,22 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                } else {
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if(fragmentManager!=null) {
+                    ActionBar actionBar = getSupportActionBar();
+                    if(actionBar!=null) {
+                        if (fragmentManager.getBackStackEntryCount() > 0) {
+                            actionBar.setDisplayHomeAsUpEnabled(true);
+                        } else {
+                            actionBar.setDisplayHomeAsUpEnabled(false);
+                        }
+                    }
                 }
             }
         });
         if(savedInstanceState==null) {
             String apiKey = DataService.getInstance().getAPIKey();
-            if(apiKey==null | apiKey.equals("")) {
+            if(TextUtils.isEmpty(apiKey)) {
                 promptUserForAPIKey();
             }
             else {

@@ -33,9 +33,9 @@ import java.util.List;
  */
 
 public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> implements View.OnClickListener {
-    Context m_Context;
-    List<DTO.MoviesListItem> m_MoviesData;
-    int m_ItemLayoutId = R.layout.fragment_movie_data_list;
+    private Context m_Context;
+    private List<DTO.MoviesListItem> m_MoviesData;
+    private int m_ItemLayoutId = R.layout.fragment_movie_data_list;
 
     public MovieDataListViewAdapter(Context c, List<DTO.MoviesListItem> moviesData) {
         this(c, moviesData, R.layout.fragment_movie_data_list);
@@ -60,7 +60,7 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
         return populateMovieGrid(position, convertView, parent);
     }
 
-    View populateMovieListView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    private View populateMovieListView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if(v==null) {
             v = LayoutInflater.from(m_Context).inflate(R.layout.fragment_movie_data_item, parent, false);
@@ -76,7 +76,7 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
         return v;
     }
 
-    View populateMovieGrid(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    private View populateMovieGrid(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if(v==null) {
             v = LayoutInflater.from(m_Context).inflate(R.layout.movie_grid_item, parent, false);
@@ -106,14 +106,9 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
     }
 
     private void loadImage(ImageView imageView, String sUrlPath) {
-        try {
-            Uri uri = Uri.parse(sUrlPath);
-            Picasso.with(m_Context)
-                    .load(uri).placeholder(R.drawable.popcorn).into(imageView);
-        }
-        catch(IOException x) {
-            Log.e(getClass().toString(),x.getMessage());
-        }
+        Uri uri = Uri.parse(sUrlPath);
+        Picasso.with(m_Context)
+                .load(uri).placeholder(R.drawable.popcorn).into(imageView);
     }
 
     @Override

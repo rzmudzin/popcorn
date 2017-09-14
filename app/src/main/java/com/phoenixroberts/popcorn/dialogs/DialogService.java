@@ -32,8 +32,11 @@ public class DialogService implements IDialogService {
             return;
         }
         Dialog dialog = new Dialog(dialogData.getContext());
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        Window dialogWindow = dialog.getWindow();
+        if(dialogWindow!=null) {
+            dialogWindow.requestFeature(Window.FEATURE_NO_TITLE);
+            dialogWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        }
         dialog.setContentView(R.layout.notification_dialog);
         dialog.setCancelable(false);
         TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
@@ -56,8 +59,11 @@ public class DialogService implements IDialogService {
     public void DisplayTextInputDialog(Dialogs.ITextInputDialogData dialogData) {
 
         Dialog dialog = new Dialog(dialogData.getContext());
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        Window dialogWindow = dialog.getWindow();
+        if(dialogWindow!=null) {
+            dialogWindow.requestFeature(Window.FEATURE_NO_TITLE);
+            dialogWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        }
         dialog.setContentView(R.layout.text_input_dialog_data);
         dialog.setCancelable(false);
         TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
@@ -111,9 +117,11 @@ public class DialogService implements IDialogService {
     }
     public void DisplayChoiceSelectionDialog(Dialogs.ISelectionDialogData dialogData) {
         Dialog dialog = new Dialog(dialogData.getContext());
-
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        Window dialogWindow = dialog.getWindow();
+        if(dialogWindow!=null) {
+            dialogWindow.requestFeature(Window.FEATURE_NO_TITLE);
+            dialogWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        }
         dialog.setContentView(R.layout.choice_selection_dialog);
         dialog.setCancelable(false);
         TextView alertTitle = (TextView)dialog.findViewById(R.id.title);
