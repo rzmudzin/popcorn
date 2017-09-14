@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//2) Lock orientation to portrait
-//3) Prompt user for API Key on first login
+//1) Prompt user for API Key on first login
+//2) Move list to top after executing a new fetch
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
     Menu m_Menu;

@@ -60,11 +60,11 @@ public class DataService {
 //      vote_average.asc, vote_average.desc, vote_count.asc, vote_count.desc
         public static final String Popular = "popularity" + Direction.Descending;
         public static final String Highest_Rated = "vote_average" + Direction.Descending;
-        public static final String Recent_Releases = "release_date" + Direction.Descending;
 
-        public static final String Popularity_Ascending = "popularity" + Direction.Ascending;
-        public static final String Rating_Ascending = "vote_average" + Direction.Ascending;
-        public static final String Release_Date_Ascending = "release_date" + Direction.Ascending;
+//        public static final String Recent_Releases = "release_date" + Direction.Descending;
+//        public static final String Least_Popular = "popularity" + Direction.Ascending;
+//        public static final String Lowest_Rated= "vote_average" + Direction.Ascending;
+//        public static final String Vintage_Movies = "release_date" + Direction.Ascending;
         public static class SortOrderType {
             String m_Name;
             String m_Value;
