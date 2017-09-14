@@ -21,6 +21,6 @@ public class AppSettings {
     public static void set(String settingName, String settingValue) {
         SharedPreferences.Editor preferenceEditor = AppMain.getAppContext().getSharedPreferences(AppMain.getAppName(), MODE_PRIVATE).edit();
         preferenceEditor.putString(settingName, settingValue);
-        preferenceEditor.commit();
+        preferenceEditor.apply();
     }
 }

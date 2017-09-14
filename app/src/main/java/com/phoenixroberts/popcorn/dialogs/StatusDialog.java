@@ -61,7 +61,7 @@ public class StatusDialog {
     }
     private void setupDialog(String status, Context context, StatusDialog.MaskType maskType, boolean displaySpinner, boolean showCentered)
     {
-        View view = null;
+        View view;
         m_Dialog = new Dialog(context);
 
         m_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -78,7 +78,7 @@ public class StatusDialog {
 
         m_Dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
 
-        view = LayoutInflater.from(context).inflate(R.layout.loading, null);
+        view = View.inflate(context, R.layout.loading, null);
         TextView statusTextView = (TextView)view.findViewById(R.id.textViewStatus);
 
         if (displaySpinner == false)
@@ -94,7 +94,7 @@ public class StatusDialog {
         if (statusTextView != null)
         {
             statusTextView.setText(status==null?"":status);
-            statusTextView.setVisibility(status==null||status==""?View.GONE:View.VISIBLE);
+            statusTextView.setVisibility(status==null||status.equals("")?View.GONE:View.VISIBLE);
         }
         if (!showCentered)
         {

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
         });
         if(savedInstanceState==null) {
             String apiKey = DataService.getInstance().getAPIKey();
-            if(apiKey==null | apiKey=="") {
+            if(apiKey==null | apiKey.equals("")) {
                 promptUserForAPIKey();
             }
             else {
@@ -95,9 +95,5 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
     public void onDataServiceResult(DataServiceBroadcastReceiver.DataServicesEventType dataServicesEventType, Intent i) {
         //If the status dialog is displayed close it
         m_StatusDialog.dismissDialog();
-        DTO.MoviesListItem movieData = DataService.getInstance().getMovieData(211672);
-        if(movieData!=null) {
-
-        }
     }
 }

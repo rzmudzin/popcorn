@@ -80,8 +80,8 @@
         <ScrollView android:id="@+id/textAreaScroller"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_x="0px"
-            android:layout_y="25px"
+            android:layout_x="0dp"
+            android:layout_y="25dp"
             android:scrollbars="vertical">
             <TextView
                 android:id="@+id/description"

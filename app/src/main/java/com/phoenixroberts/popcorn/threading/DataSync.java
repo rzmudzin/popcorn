@@ -9,11 +9,11 @@ import android.util.Log;
 
 public class DataSync {
 
-    static public interface IDataSyncAction {
+    public interface IDataSyncAction {
         void execute();                         //Invoked by doInBackground
         void cancel();                          //Supports canceling
     }
-    static public interface IDataSyncListener {
+    public interface IDataSyncListener {
         void onDataSyncComplete();                  //Callback for when completed
         void onProgressUpdate(Integer amount);      //Callback for progress
     }

@@ -37,9 +37,9 @@ import okhttp3.Response;
 
 public class DataService {
     private static DataService m_DataService = new DataService();
-    private String m_MediaServiceBasePath = "http://image.tmdb.org/t/p/";
-    private String m_DataServiceBasePath = "https://api.themoviedb.org/3/";
-    String m_MovieListService = "discover/movie?api_key=";
+    private final String m_MediaServiceBasePath = "http://image.tmdb.org/t/p/";
+    private final String m_DataServiceBasePath = "https://api.themoviedb.org/3/";
+    private final String m_MovieListService = "discover/movie?api_key=";
     private String m_APIKey;
     private List<DTO.MoviesListItem> m_MoviesList = new ArrayList<DTO.MoviesListItem>();
     private String m_DefaultSortOrder;
@@ -114,7 +114,7 @@ public class DataService {
     private DataService() {
         m_APIKey = AppSettings.get(AppSettings.Settings.APKI_Key);
         String defaultSortOrder = AppSettings.get(AppSettings.Settings.Sort_Order);
-        m_DefaultSortOrder = defaultSortOrder!=""?defaultSortOrder:SortOrder.Popular;
+        m_DefaultSortOrder = defaultSortOrder.equals("")==false?defaultSortOrder:SortOrder.Popular;
     }
     public static DataService getInstance() {
         return m_DataService;
@@ -252,7 +252,6 @@ public class DataService {
                 String jsonData = response.body().string();
                 DTO.MoviesListResultPage fetchResult = mapper.readValue(jsonData, DTO.MoviesListResultPage.class);
                 if (fetchResult != null) {
-                    int pageCount = fetchResult.getTotalPages();
                     m_MoviesList = fetchResult.getResults();
                     if (m_MoviesList != null) {
                         for (DTO.MoviesListItem result : m_MoviesList) {

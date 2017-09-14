@@ -107,7 +107,6 @@ public class MovieDataListViewAdapter extends ArrayAdapter<DTO.MoviesListItem> i
 
     private void loadImage(ImageView imageView, String sUrlPath) {
         try {
-            URL url = new URL(sUrlPath);
             Uri uri = Uri.parse(sUrlPath);
             Picasso.with(m_Context)
                     .load(uri).placeholder(R.drawable.popcorn).into(imageView);
