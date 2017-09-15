@@ -1,6 +1,6 @@
 
 ### What is this repository for? ###
-This is Movie DB App project for Udacity course.
+This is a movie app project for Udacity Android course.
 
 
 
