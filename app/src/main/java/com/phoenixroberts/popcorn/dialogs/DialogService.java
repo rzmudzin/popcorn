@@ -1,6 +1,7 @@
 package com.phoenixroberts.popcorn.dialogs;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -54,6 +55,7 @@ public class DialogService implements IDialogService {
                 okAction.accept(null);
             }
         });
+        setBackButtonListener(dialog);
         dialog.show();
     }
     public void DisplayTextInputDialog(Dialogs.ITextInputDialogData dialogData) {
@@ -113,6 +115,7 @@ public class DialogService implements IDialogService {
 
             }
         });
+        setBackButtonListener(dialog);
         dialog.show();
     }
     public void DisplayChoiceSelectionDialog(Dialogs.ISelectionDialogData dialogData) {
@@ -134,6 +137,18 @@ public class DialogService implements IDialogService {
         cancel.setOnClickListener((v) -> {
             dialog.dismiss();
         });
+        setBackButtonListener(dialog);
         dialog.show();
+    }
+    private void setBackButtonListener(Dialog dialog) {
+        dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface arg0, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
     }
 }
