@@ -13,7 +13,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AppSettings {
     public static class Settings {
-        public static final String Sort_Order = "SortOrder";
+        public static final String List_Sort_Order = "ListSortOrder";
+        public static final String Discovery_Sort_Order = "DiscoverySortOrder";
         public static final String APKI_Key = "APIKey";
     }
     public static String get(String settingName) {

@@ -8,12 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.phoenixroberts.popcorn.AppSettings;
 import com.phoenixroberts.popcorn.R;
-import com.phoenixroberts.popcorn.data.DTO;
 import com.phoenixroberts.popcorn.data.DataService;
 import com.phoenixroberts.popcorn.data.DataServiceBroadcastReceiver;
 import com.phoenixroberts.popcorn.dialogs.DialogService;
@@ -21,10 +18,6 @@ import com.phoenixroberts.popcorn.dialogs.Dialogs;
 import com.phoenixroberts.popcorn.dialogs.StatusDialog;
 import com.phoenixroberts.popcorn.fragments.MovieGridFragment;
 import com.phoenixroberts.popcorn.threading.IDataServiceListener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements IDataServiceListener {
@@ -90,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements IDataServiceListe
         m_StatusDialog = new StatusDialog(new StatusDialog.ShowStatusRequest(this, true, "Loading",
                 StatusDialog.MaskType.Black, true));
         m_StatusDialog.showDialog();
-        DataService.getInstance().fetchMoviesData();
+        DataService.getInstance().fetchListDiscoveryData();
     }
 
     @Override

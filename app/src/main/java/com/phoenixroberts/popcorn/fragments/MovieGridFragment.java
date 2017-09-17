@@ -123,9 +123,9 @@ public class MovieGridFragment extends Fragment implements IDataServiceListener 
                 }
                 else {
                     List<Dialogs.ISelectionDialogItemData> options = new ArrayList<Dialogs.ISelectionDialogItemData>();
-                    for (DataService.SortOrder.SortOrderType sortOrderType : DataService.SortOrder.values()) {
+                    for (DataService.MovieListSortOrder.SortOrderType sortOrderType : DataService.MovieListSortOrder.values()) {
                         options.add(new Dialogs.SelectionDialogItemData(sortOrderType.getName(), (eventArgs) -> {
-                            DataService.getInstance().setSortOrder(sortOrderType.getValue());
+                            DataService.getInstance().setListSortOrder(sortOrderType.getValue());
                             ((MainActivity) getActivity()).LoadData();
                         }));
                     }
