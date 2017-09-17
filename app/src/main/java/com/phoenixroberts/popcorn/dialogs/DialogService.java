@@ -146,8 +146,9 @@ public class DialogService implements IDialogService {
             public boolean onKey(DialogInterface arg0, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     dialog.dismiss();
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
     }
