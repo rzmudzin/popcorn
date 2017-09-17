@@ -174,7 +174,7 @@ public class DataService {
         return getPosterPath(movieId, PosterSize.W185);
     }
     public String getMovieDetailPosterPath(Integer movieId) {
-        return getPosterPath(movieId, PosterSize.W500);
+        return getPosterPath(movieId, PosterSize.W185);
     }
     public String getPosterPath(Integer movieId, String posterSize) {
         DTO.MoviesListItem movie = getMovieData(movieId);
