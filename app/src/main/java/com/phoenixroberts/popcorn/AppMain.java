@@ -23,6 +23,12 @@ public class AppMain extends Application {
         DataServiceBroadcastReceiver.getInstance().Register(getApplicationContext());
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        DataServiceBroadcastReceiver.getInstance().Unregister(getApplicationContext());
+    }
+
     public static Context getAppContext() {
         return m_Instance!=null?m_Instance.getApplicationContext():null;
     }
